@@ -12,7 +12,7 @@
         "classmap": [],
         "files": [],
         "psr-4": {
-            "Interpro\\QuickStorage": "src/"
+            "Interpro\\QuickStorage\\": "src/"
         }
     },
     "minimum-stability": "dev",
