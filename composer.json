@@ -15,8 +15,5 @@
             "Interpro\\QuickStorage\\": "src/"
         }
     },
-    "minimum-stability": "dev",
-    "require": {
-        "prehistorical/imagefilelogic": "1.0.x-dev"
-    }
+    "minimum-stability": "dev"
 }

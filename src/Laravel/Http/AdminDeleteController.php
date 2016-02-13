@@ -5,7 +5,7 @@ namespace Interpro\QuickStorage\Laravel\Http;
 use App\Http\Controllers\Controller;
 use Interpro\QuickStorage\Laravel\Model\Group;
 
-class DeleteController extends Controller
+class AdminDeleteController extends Controller
 {
     public function deleteGroupItem($id){
         try {

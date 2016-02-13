@@ -7,9 +7,9 @@ use Interpro\QuickStorage\Laravel\Model\Group;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Controller;
 
-class SaveController extends Controller
+class AdminUpdateController extends Controller
 {
-    public function saveBlock()
+    public function updateBlock()
     {
 
         if(Request::has('entity'))
@@ -41,7 +41,7 @@ class SaveController extends Controller
 
     }
 
-    public function saveGroupItem()
+    public function updateGroupItem()
     {
         if(Request::has('entity') && Request::has('block') && Request::has('id'))
         {

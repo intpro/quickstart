@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Interpro\QuickStorage\Laravel\Model\Block;
 use Illuminate\Support\Facades\DB;
 
-class CreateController extends Controller
+class AdminCreateController extends Controller
 {
     public function createGroupItem($block, $group, $owner_id)
     {
