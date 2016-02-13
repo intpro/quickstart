@@ -1,0 +1,20 @@
+{
+    "name": "interpro/ersatzstorage",
+    "description": "Storage logic for quick start",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Boris Dorofeev",
+            "email": "boris.dorofeev@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": [],
+        "files": [],
+        "psr-4": {
+            "Interpro\\QuickStorage": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {}
+}
