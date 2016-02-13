@@ -27,8 +27,8 @@ class Imageitem extends Model
             {
                 if(trim($imageitem->prefix) !== '')
                 {
-                    \Prehistorical\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
-                    \Prehistorical\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
+                    \Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
+                    \Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
                 }
 
             }

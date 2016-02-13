@@ -21,3 +21,4 @@ class AdminDeleteController extends Controller
         }
     }
 }
+
