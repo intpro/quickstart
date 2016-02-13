@@ -1,5 +1,5 @@
 {
-    "name": "interpro/ersatzstorage",
+    "name": "interpro/quickstorage",
     "description": "Storage logic for quick start",
     "license": "MIT",
     "authors": [
@@ -16,5 +16,7 @@
         }
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "prehistorical/imagefilelogic": "1.0.x-dev"
+    }
 }
