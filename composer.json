@@ -22,6 +22,6 @@
     },
     "minimum-stability": "dev",
     "require": {
-        "interpro/imagefilelogic": "1.0-dev"
+        "interpro/imagefilelogic": "dev-master"
     }
 }
