@@ -59,6 +59,11 @@ class UpdateGroupItemCommandHandler {
                 $group_item->owner_id = $dataobj['owner'];
             }
 
+            if(array_key_exists('slug', $dataobj))
+            {
+                $group_item->slug = $dataobj['slug'];
+            }
+
             $qstorage = config('qstorage');
 
             if(array_key_exists($block_name, $qstorage))

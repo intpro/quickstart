@@ -107,7 +107,7 @@ class QSource implements QSourceInterface
 
         $fields = $this->storageStruct->getGroupFieldsFlat($block_name, $group_name);
 
-        $fields_except = ['id', 'owner_id', 'group_name', 'group_owner_name', 'block_name', 'title', 'sorter', 'show'];
+        $fields_except = ['id', 'owner_id', 'group_name', 'group_owner_name', 'block_name', 'title', 'slug', 'sorter', 'show'];
 
         foreach($fields as $field_name)
         {

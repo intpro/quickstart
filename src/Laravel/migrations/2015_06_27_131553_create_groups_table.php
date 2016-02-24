@@ -15,6 +15,7 @@ class CreateGroupsTable extends Migration
         Schema::create('groups', function(Blueprint $table)
         {
             $table->increments('id');
+            $table->string('slug')->index();
             $table->integer('owner_id')->unsigned()->index();
             $table->string('group_owner_name')->index();
             $table->string('group_name')->index();

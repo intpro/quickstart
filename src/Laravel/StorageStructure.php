@@ -107,7 +107,7 @@ class StorageStructure implements StorageStructureInterface
     {
         $struct = $this->getGroupConfig($blockName, $groupName);
 
-        $fields_flat = ['id', 'owner_id', 'block_name', 'group_owner_name', 'group_name', 'title', 'sorter', 'show'];
+        $fields_flat = ['id', 'owner_id', 'block_name', 'group_owner_name', 'group_name', 'title', 'slug', 'sorter', 'show'];
 
         $types = ['stringfields', 'textfields', 'numbs', 'bools', 'pdatetimes', 'images'];
         foreach($types as $type)
