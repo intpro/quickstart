@@ -25,4 +25,17 @@ interface GroupSpecification
      */
     public function asScope($query);
 
+    /**
+     *
+     * @return $string
+     */
+    public function getGroup();
+
+
+    /**
+     *
+     * @return string
+     */
+    public function getFieldName();
+
 }

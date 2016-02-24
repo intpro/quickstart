@@ -3,43 +3,38 @@
 namespace Interpro\QuickStorage\Laravel\Collection;
 
 use Interpro\QuickStorage\Concept\Collection\GroupCollection as GroupCollectionInterface;
-use Illuminate\Database\Eloquent\Collection as EloquentCollection;
-use Interpro\QuickStorage\Concept\StorageStructure;
 use Interpro\QuickStorage\Laravel\Item\GroupItem;
 
 class GroupCollection implements GroupCollectionInterface
 {
     private $group_name;
     private $items = [];
+    private $object_items = [];
     private $position = 0;
-    private $storageStruct;
-    private $depth;
-
-    private function init($collection)
-    {
-        $this->items = [];
-
-        foreach($collection as $item){
-            if($item->group_name == $this->group_name)
-            {
-                $this->items[] = $item;
-            }
-        }
-    }
 
     public function __construct(
+        $block_name,
         $group_name,
-        StorageStructure $storageStruct,
-        EloquentCollection $collection,
-        $depth
-    )
-    {
+        $group_array,
+        $owner_id = 0
+    ){
         $this->group_name    = $group_name;
-        $this->storageStruct = $storageStruct;
         $this->position      = 0;
-        $this->depth         = $depth;
 
-        $this->init($collection);
+        $this->items = & $group_array;
+    }
+
+    private function createItem($position)
+    {
+        if(array_key_exists('pos_'.$position, $this->object_items))
+        {
+            $item = $this->object_items['pos_'.$position];
+        }else{
+            $item = new GroupItem($this->items[$this->position]);
+            $this->object_items['pos_'.$position] = $item;
+        }
+
+        return $item;
     }
 
     function rewind()
@@ -49,12 +44,7 @@ class GroupCollection implements GroupCollectionInterface
 
     function current()
     {
-        return new GroupItem(
-            $this->storageStruct,
-            $this->items[$this->position],
-            $this->items[$this->position]->groups,
-            $this->depth
-        );
+        return $this->createItem($this->position);
     }
 
     function key()

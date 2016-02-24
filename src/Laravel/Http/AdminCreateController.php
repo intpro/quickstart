@@ -3,22 +3,32 @@
 namespace Interpro\QuickStorage\Laravel\Http;
 
 use App\Http\Controllers\Controller;
-use Interpro\QuickStorage\Laravel\Model\Block;
+use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
+use Interpro\QuickStorage\Concept\Command\InitAllBlockCommand;
+use Interpro\QuickStorage\Concept\Command\InitOneBlockCommand;
 use Illuminate\Support\Facades\DB;
+use Interpro\QuickStorage\Laravel\Item\GroupItem;
 
 class AdminCreateController extends Controller
 {
+
+    public function __construct()
+    {
+
+    }
+
     public function createGroupItem($block, $group, $owner_id)
     {
         try {
 
-            $block = Block::findOrFail($block);
+            $dataArr = $this->dispatch(new CreateGroupItemCommand($block, $group, $owner_id));
 
-            $item = $block->createGroupItem($group, $owner_id);
+            $group_item = new GroupItem($dataArr);
+
+            $complhtml = view('back/blocks/groupitems/'.$group, ['item_'.$group => $group_item])->render();
+
 
             $status = 'OK';
-
-            $complhtml = view('back/blocks/groupitems/'.$block->name.'_'.$group, ['item_'.$group => $item])->render();
 
             return compact('status', 'complhtml');
 
@@ -26,12 +36,10 @@ class AdminCreateController extends Controller
 
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
         }
-
     }
 
     public function createInit()
     {
-
         try {
 
             //Очистим всё, если там что-то есть
@@ -43,8 +51,12 @@ class AdminCreateController extends Controller
             DB::table('pdatetimes')->delete();
             DB::table('numbs')->delete();
             DB::table('images')->delete();
+            //Эту хрень выше потом обернуть во что-нибудь красивое
 
-            Block::initBlocks();
+            $this->dispatch(
+                new InitAllBlockCommand()
+            );
+
         } catch(\Exception $exception) {
 
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
@@ -56,7 +68,11 @@ class AdminCreateController extends Controller
     public function createInitBlock($block_name)
     {
         try {
-            Block::initBlocks($block_name);
+
+            $this->dispatch(
+                new InitOneBlockCommand($block_name)
+            );
+
         } catch(\Exception $exception) {
 
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
@@ -65,5 +81,3 @@ class AdminCreateController extends Controller
         return ['status'=>'OK'];
     }
 }
-
-

@@ -7,16 +7,79 @@ use Interpro\QuickStorage\Concept\StorageStructure as StorageStructureInterface;
 class StorageStructure implements StorageStructureInterface
 {
 
+    private $types;
+
+    private function getTypes()
+    {
+        if (!isset($this->types))
+        {
+            $this->types = ['stringfields' => 'Interpro\QuickStorage\Laravel\Model\Stringfield',
+                            'textfields' => 'Interpro\QuickStorage\Laravel\Model\Textfield',
+                            'numbs' => 'Interpro\QuickStorage\Laravel\Model\Numb',
+                            'bools' => 'Interpro\QuickStorage\Laravel\Model\Bool',
+                            'pdatetimes' => 'Interpro\QuickStorage\Laravel\Model\Pdatetime',
+                            'images' => 'Interpro\QuickStorage\Laravel\Model\Imageitem'];
+        }
+
+        return $this->types;
+    }
+
     /**
      * @param string $blockName
      *
-     * @return bool
+     * @return array
      */
-    private function getBlockFieldsFlat($blockName)
+    public function getBlockImagesFlat($blockName)
     {
         $struct = $this->getBlockConfig($blockName);
 
-        $fields_flat = [];
+        $images_flat = [];
+
+        if(array_key_exists('images', $struct))
+        {
+            foreach($struct['images'] as $image_name)
+            {
+                $images_flat[] = $image_name;
+            }
+        }
+
+        return $images_flat;
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
+     * @return array
+     */
+    public function getGroupImagesFlat($blockName, $groupName)
+    {
+        $struct = $this->getGroupConfig($blockName, $groupName);
+
+        $images_flat = [];
+
+        if(array_key_exists('images', $struct))
+        {
+            foreach($struct['images'] as $image_name)
+            {
+                $images_flat[] = $image_name;
+            }
+        }
+
+        return $images_flat;
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @return array
+     */
+    public function getBlockFieldsFlat($blockName)
+    {
+        $struct = $this->getBlockConfig($blockName);
+
+        $fields_flat = ['name', 'title', 'show'];
 
         $types = ['stringfields', 'textfields', 'numbs', 'bools', 'pdatetimes', 'images'];
         foreach($types as $type)
@@ -38,13 +101,13 @@ class StorageStructure implements StorageStructureInterface
      *
      * @param string $groupName
      *
-     * @return bool
+     * @return array
      */
-    private function getGroupFieldsFlat($blockName, $groupName)
+    public function getGroupFieldsFlat($blockName, $groupName)
     {
         $struct = $this->getGroupConfig($blockName, $groupName);
 
-        $fields_flat = [];
+        $fields_flat = ['id', 'owner_id', 'block_name', 'group_owner_name', 'group_name', 'title', 'sorter', 'show'];
 
         $types = ['stringfields', 'textfields', 'numbs', 'bools', 'pdatetimes', 'images'];
         foreach($types as $type)
@@ -106,11 +169,89 @@ class StorageStructure implements StorageStructureInterface
     }
 
     /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function getModelName($type)
+    {
+        return $this->getTypes()[$type];
+    }
+
+    public function getModelNameByFieldBlock($blockName, $fieldName)
+    {
+        return $this->getBlockFieldsModels($blockName)[$fieldName];
+    }
+
+    public function getModelNameByFieldGroup($blockName, $groupName, $fieldName)
+    {
+        return $this->getGroupFieldsModels($blockName, $groupName)[$fieldName];
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
+     * @return bool
+     */
+    public function getGroupFieldsModels($blockName, $groupName)
+    {
+        $struct = $this->getGroupConfig($blockName, $groupName);
+
+        $fields_flat = [];
+
+        $types = $this->getTypes();
+
+        foreach($types as $type=>$model)
+        {
+            if(array_key_exists($type, $struct))
+            {
+                foreach($struct[$type] as $fieldname)
+                {
+                    $fields_flat[$fieldname] = $model;
+                }
+            }
+        }
+
+        return $fields_flat;
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
+     * @return bool
+     */
+    public function getBlockFieldsModels($blockName)
+    {
+        $struct = $this->getBlockConfig($blockName);
+
+        $fields_flat = [];
+
+        $types = $this->getTypes();
+
+        foreach($types as $type=>$model)
+        {
+            if(array_key_exists($type, $struct))
+            {
+                foreach($struct[$type] as $fieldname)
+                {
+                    $fields_flat[$fieldname] = $model;
+                }
+            }
+        }
+
+        return $fields_flat;
+    }
+
+    /**
      * @param string $blockName
      *
      * @return array
      */
-    public function getGroupsSub9n($blockName)
+    public function getGroupsSub9n($blockName) //getGroupsStruct
     {
 
         $groups_conf = $this->getGroupsFlatConfig($blockName);
@@ -166,7 +307,7 @@ class StorageStructure implements StorageStructureInterface
      */
     public function getGroupsFlatConfig($blockName)
     {
-        return config('ersatzstorage.'.$blockName)['groups'];
+        return config('qstorage.'.$blockName)['groups'];
     }
 
     /**
@@ -176,7 +317,7 @@ class StorageStructure implements StorageStructureInterface
      */
     public function getBlockConfig($blockName)
     {
-        return config('ersatzstorage.'.$blockName);
+        return config('qstorage.'.$blockName);
     }
 
     /**
@@ -188,7 +329,7 @@ class StorageStructure implements StorageStructureInterface
      */
     public function getGroupConfig($blockName, $groupName)
     {
-        return config('ersatzstorage.'.$blockName)['groups'][$groupName];
+        return config('qstorage.'.$blockName)['groups'][$groupName];
     }
 
     /**
@@ -265,7 +406,42 @@ class StorageStructure implements StorageStructureInterface
         }
     }
 
+    /**
+     * @param string $blockName
+     *
+     * @param string $fieldName
+     *
+     * @return bool
+     */
+    public function blockImageExist($blockName, $fieldName)
+    {
+        $fields = $this->getBlockFieldsFlat($blockName);
 
+        return in_array($fieldName, $fields);
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
+     * @param string $fieldName
+     *
+     * @return bool
+     */
+    public function groupImageExist($blockName, $groupName, $imageName)
+    {
+        $groups_conf = $this->getGroupsFlatConfig($blockName);
+
+        if(!array_key_exists($groupName, $groups_conf))
+        {
+            return false;
+        }else{
+            $struct = $this->getGroupImagesFlat($blockName, $groupName);
+
+            return in_array($imageName, $struct);
+        }
+    }
 
 }
 

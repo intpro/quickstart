@@ -20,7 +20,6 @@ class CreateStringfieldsTable extends Migration
             $table->integer('group_id');
             $table->string('group_name');
             $table->string('name');
-            //$table->string('usedas'); //subtitle, citsign, link, slogan, echophrase, appeal, phrase (если не понятно что это обзывать phrase)
 
             $table->string('value');
         });

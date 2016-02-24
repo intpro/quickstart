@@ -5,20 +5,20 @@ namespace Interpro\QuickStorage\Concept\Sorting;
 interface GroupSortingSet extends \Iterator
 {
     /**
+     * @param string $group_name
      *
      * @param GroupSorting $sorting
      *
      * @return void
      */
-    public function add(GroupSorting $sorting);
+    public function add($group_name, GroupSorting $sorting);
+
 
     /**
-     * Checks scope
-     *
-     * @param string $key
+     * @param string $group_name
      *
      * @return void
      */
-    public function rawAdd($groupName, $key, $way);
-    //Используя StorageStructure интерфес проверяем, есть ли вообще такое поле
+    public function setCurrentGroup($group_name);
+
 }

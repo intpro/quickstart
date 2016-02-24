@@ -6,19 +6,18 @@ interface GroupSpecificationSet extends \Iterator
 {
     /**
      *
+     * @param string $group_name
+     *
      * @param GroupSpecification $specification
      *
      * @return void
      */
-    public function add(GroupSpecification $specification);
+    public function add($group_name, GroupSpecification $specification);
 
     /**
-     * Checks scope
-     *
-     * @param string $key
+     * @param string $group_name
      *
      * @return void
      */
-    public function rawAdd($groupName, $key, $value);
-    //Используя StorageStructure интерфес проверяем, есть ли вообще такое поле
+    public function setCurrentGroup($group_name);
 }

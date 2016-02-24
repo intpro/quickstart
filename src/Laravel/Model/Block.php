@@ -54,12 +54,12 @@ class Block extends Model
 
     public function saveBlock($dataobj)
     {
-        $landing = config('ersatzstorage');
+        $qstorage = config('qstorage');
 
-        if(array_key_exists($this->name, $landing))
+        if(array_key_exists($this->name, $qstorage))
         {
 
-            $blockstruct = $landing[$this->name];
+            $blockstruct = $qstorage[$this->name];
 
             if(array_key_exists('title', $dataobj))
             {
@@ -153,7 +153,7 @@ class Block extends Model
 
         $blockname = $this->name;
 
-        $groupstruct = config('ersatzstorage')[$this->name]['groups'][$group_name];
+        $groupstruct = config('qstorage')[$this->name]['groups'][$group_name];
 
         $newGroupItem = new \Interpro\QuickStorage\Laravel\Model\Group();
         $newGroupItem->block_name = $blockname;
@@ -265,7 +265,7 @@ class Block extends Model
 
         $depth = 0;
 
-        $groupstruct_0 = config('ersatzstorage.'.$this->name)['groups'];
+        $groupstruct_0 = config('qstorage.'.$this->name)['groups'];
 
         foreach ($groupstruct_0 as $groupname => $groupstruct)
         {
@@ -380,7 +380,7 @@ class Block extends Model
 
     public  function getGroupsStruct()
     {
-        $groups_conf = config('ersatzstorage.'.$this->name)['groups'];
+        $groups_conf = config('qstorage.'.$this->name)['groups'];
         $groupstruct_invert = [];
 
         foreach ($groups_conf as $groupname => $_conf)
@@ -407,7 +407,7 @@ class Block extends Model
     private function getGroupItemsArray($addshow = false)
     {
 
-        $groupstruct_0 = config('ersatzstorage.'.$this->name)['groups'];
+        $groupstruct_0 = config('qstorage.'.$this->name)['groups'];
         $groupstruct_invert = $this->getGroupsStruct();
 
         $dataArr = [];
@@ -561,12 +561,12 @@ class Block extends Model
     {
         if($block_name==''){
             //Создаем поля по структуре
-            $landing = config('ersatzstorage');
+            $qstorage = config('qstorage');
         }else{
-            $landing = [$block_name=>config('ersatzstorage')[$block_name]];
+            $qstorage = [$block_name=>config('qstorage')[$block_name]];
         }
 
-        foreach($landing as $blockname => $blockstruct)
+        foreach($qstorage as $blockname => $blockstruct)
         {
             $newBlock = static::find($blockname);
 

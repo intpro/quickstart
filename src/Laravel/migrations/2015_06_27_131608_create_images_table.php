@@ -16,16 +16,20 @@ class CreateImagesTable extends Migration
         {
             $table->increments('id');
 
+            $table->string('value');//Для совместимости запросов
+
             $table->string('name');
             $table->string('block_name');
             $table->string('group_name');
             $table->integer('group_id');
             $table->string('prefix');
             $table->string('alt');
+            $table->string('original_link');
             $table->string('primary_link');
             $table->string('secondary_link');
             $table->string('icon_link');
             $table->string('preview_link');
+            $table->integer('cache_index');
         });
     }
 

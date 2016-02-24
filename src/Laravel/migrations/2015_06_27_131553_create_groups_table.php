@@ -16,6 +16,7 @@ class CreateGroupsTable extends Migration
         {
             $table->increments('id');
             $table->integer('owner_id')->unsigned()->index();
+            $table->string('group_owner_name')->index();
             $table->string('group_name')->index();
 
             $table->string('block_name')->index();

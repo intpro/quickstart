@@ -2,15 +2,18 @@
 
 class UpdateGroupItemCommand extends Command {
 
-    public $name;
-	/**
-	 * Update a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct($name)
-	{
-		$this->name = $name;
-	}
+    public $group_id;
+    public $data_arr;
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct($group_id, $data_arr)
+    {
+        $this->group_id   = $group_id;
+        $this->data_arr   = $data_arr;
+    }
 
 }

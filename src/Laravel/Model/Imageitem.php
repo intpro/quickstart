@@ -3,6 +3,7 @@
 namespace Interpro\QuickStorage\Laravel\Model;
 
 use Illuminate\Database\Eloquent\Model;
+use Interpro\ImageFileLogic\Laravel\Action\DeleteImageAction;
 
 class Imageitem extends Model
 {
@@ -27,8 +28,16 @@ class Imageitem extends Model
             {
                 if(trim($imageitem->prefix) !== '')
                 {
-                    \Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
-                    \Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
+                    //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
+                    //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
+
+                    $imageItem = new ImageItem($imageitem->prefix, []);
+                    $imageItem_mod = new ImageItem('mod_'.$imageitem->prefix, []);
+
+                    $delAction = new DeleteImageAction();
+
+                    $delAction->applyFor($imageItem);
+                    $delAction->applyFor($imageItem_mod);
                 }
 
             }

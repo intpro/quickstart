@@ -17,6 +17,7 @@ class CreateBlocksTable extends Migration
 
             $table->string('name')->index();
             $table->string('title');
+            $table->boolean('show');
 
         });
     }

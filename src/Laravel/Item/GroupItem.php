@@ -8,56 +8,54 @@ use Interpro\QuickStorage\Concept\Exception\WrongGroupNameException;
 
 class GroupItem extends EntityItem implements GroupItemInterface
 {
-    protected function initDepFields()
+
+    public function getEntityName()
     {
-        $this->setName('group_name');
+        return $this->getField('group_name');
+    }
 
-        $this->setField('name',         $this->getAttr('group_name'));
-        $this->setField('block_name',   $this->getAttr('block_name'));
-        $this->setField('title',        $this->getAttr('title'));
+    public function getId()
+    {
+        return $this->getField('id');
+    }
 
-        $this->setField('name_field',       $this->getField('name'));
-        $this->setField('block_name_field', $this->getField('block_name'));
-        $this->setField('title_field',      $this->getField('title'));
-
-        $this->setField('sorter',       $this->getAttr('sorter'));
-        $this->setField('show',         $this->getAttr('show'));
-
-        $this->setField('sorter_field', $this->getField('sorter'));
-        $this->setField('show_field',   $this->getField('show'));
+    public function getImageFields($image_name)
+    {
+        return $this->imageRepository->getGroupImage($this->getField('block_name'), $this->getField('group_name'), $this->getId(), $image_name);
     }
 
     //Перехватываем магическими методами обращения к полям и возвращаем значения из связанных таблиц (по типам)
     public function __get($req_name)
     {
 
-        if($req_name == 'name' or
-            $req_name == 'title' or
-            $req_name == 'block_name' or
-            $req_name == 'sorter' or
-            $req_name == 'show' or
-            $req_name == 'name_field' or
-            $req_name == 'title_field' or
-            $req_name == 'block_name_field' or
-            $req_name == 'sorter_field' or
-            $req_name == 'show_field'
-        ){
-
-            $value = $this->getField($req_name);
-
-        }elseif (substr($req_name, -5) == 'field'){
+        if (substr($req_name, -5) == 'field'){
 
             $field_name = substr($req_name, 0, -6); //+прочерк между именем и field
 
             if($this->groupFieldExist(
                $this->getField('block_name'),
-               $this->getField('name'),
+               $this->getField('group_name'),
                $field_name
             ))
             {
                 $value = $this->getField($field_name);
             }else{
-                throw new WrongGroupFieldNameException('Поле '.$field_name.' блока '.$this->getField('block_name').' не найдено в настройке.');
+                throw new WrongGroupFieldNameException('Поле '.$field_name.' группы '.$this->getField('group_name').' не найдено в настройке.');
+            }
+
+        }elseif (substr($req_name, -5) == 'image'){
+
+            $image_name = substr($req_name, 0, -6); //+прочерк между именем и image
+
+            if($this->groupFieldExist(
+                $this->getField('block_name'),
+                $this->getField('group_name'),
+                $image_name
+            ))
+            {
+                $value = $this->getImage($image_name);
+            }else{
+                throw new WrongGroupFieldNameException('Картинка '.$image_name.' группы '.$this->getField('group_name').' не найдена в настройке.');
             }
 
         }elseif (substr($req_name, -5) == 'group'){
@@ -66,22 +64,24 @@ class GroupItem extends EntityItem implements GroupItemInterface
 
             if($this->subGroupExist(
                $this->getField('block_name'),
-               $this->getField('name'),
+               $this->getField('group_name'),
                $group_name
             ))
             {
-                $value = $this->createGroupCollection($group_name);
+                $value = $this->getGroupCollection(
+                    $this->getField('block_name'),
+                    $group_name,
+                    $this->getField('id')
+                );
             }else{
-                throw new WrongGroupNameException('Группа '.$group_name.' в составе группы '.$this->getField('name').' блока '.$this->getField('block_name').' не найдена.');
+                throw new WrongGroupNameException('Группа '.$group_name.' в составе группы '.$this->getField('group_name').' не найдена.');
             }
 
         }else{
-            throw new WrongGroupFieldNameException('Поле блока '.$this->getField('name').' не найдено в настройке.');
+            throw new WrongGroupFieldNameException('Поле группы '.$this->getField('group_name').' не найдено в настройке.');
         }
 
         return $value;
     }
-
-
 
 }

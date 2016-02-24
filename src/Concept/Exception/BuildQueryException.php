@@ -2,4 +2,4 @@
 
 namespace Interpro\QuickStorage\Concept\Exception;
 
-class BlockNotFoundException extends \Exception {}
+class BuildQueryException extends \Exception {}

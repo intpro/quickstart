@@ -3,11 +3,19 @@
 namespace Interpro\QuickStorage\Laravel\Specification;
 
 use Interpro\QuickStorage\Concept\Item\GroupItem;
-
 use Interpro\QuickStorage\Concept\Specification\GroupSpecification as GroupSpecificationInterface;
 
-class GroupSpecification implements GroupSpecificationInterface
+abstract class GroupSpecification implements GroupSpecificationInterface
 {
+    protected $group_name;
+    protected $field_name;
+
+
+    public function __construct($group_name, $field_name)
+    {
+        $this->group_name = $group_name;
+        $this->field_name = $field_name;
+    }
 
     /**
      * Checks if given item meets all criteria
@@ -16,10 +24,7 @@ class GroupSpecification implements GroupSpecificationInterface
      *
      * @return bool
      */
-    public function isSatisfiedBy(GroupItem $item)
-    {
-
-    }
+    abstract public function isSatisfiedBy(GroupItem $item);
 
     /**
      * Checks scope
@@ -28,9 +33,26 @@ class GroupSpecification implements GroupSpecificationInterface
      *
      * @return mixed
      */
-    public function asScope($query)
-    {
+    abstract public function asScope($query);
 
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
+    public function getGroup()
+    {
+        return $this->group_name;
+    }
+
+
+    /**
+     *
+     * @return string
+     */
+    public function getFieldName()
+    {
+        return $this->field_name;
     }
 
 }

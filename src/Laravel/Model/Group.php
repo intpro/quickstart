@@ -76,11 +76,11 @@ class Group extends Model
             $this->owner_id = $dataobj['owner'];
         }
 
-        $landing = config('landing');
+        $qstorage = config('qstorage');
 
-        if(array_key_exists($this->block_name, $landing))
+        if(array_key_exists($this->block_name, $qstorage))
         {
-            $groupstruct = config('landing')[$this->block_name]['groups'][$this->group_name];
+            $groupstruct = config('qstorage')[$this->block_name]['groups'][$this->group_name];
 
             foreach(['stringfields', 'textfields', 'numbs', 'images', 'bools', 'pdatetimes'] as $typename) {
 

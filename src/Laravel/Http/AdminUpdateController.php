@@ -2,8 +2,8 @@
 
 namespace Interpro\QuickStorage\Laravel\Http;
 
-use Interpro\QuickStorage\Laravel\Model\Block;
-use Interpro\QuickStorage\Laravel\Model\Group;
+use Interpro\QuickStorage\Concept\Command\UpdateBlockCommand;
+use Interpro\QuickStorage\Concept\Command\UpdateGroupItemCommand;
 use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\Controller;
 
@@ -11,7 +11,6 @@ class AdminUpdateController extends Controller
 {
     public function updateBlock()
     {
-
         if(Request::has('entity'))
         {
             $dataobj = Request::all();
@@ -20,53 +19,47 @@ class AdminUpdateController extends Controller
             {
                 try {
 
-                    $block = Block::firstOrCreate(['name'=>$dataobj['block']]);
+                    $this->dispatch(new UpdateBlockCommand($dataobj['block'], $dataobj));
 
-                    $result = $block->saveBlock($dataobj);
-
-                    return ['status'=>$result];
+                    return ['status' => 'OK'];
 
                 } catch(\Exception $exception) {
-                    return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+                    return ['status' => ('Что-то пошло не так. '.$exception->getMessage())];
                 }
             } else {
-                return ['status'=>'Имя сохраняемой сущности не равно block ('.$dataobj['entity'].').'];
+                return ['status' => 'Имя сохраняемой сущности не равно block ('.$dataobj['entity'].').'];
             }
 
         } else {
 
-            return ['status'=>'Не хватает параметров для сохранения.'];
-
+            return ['status' => 'Не хватает параметров для сохранения.'];
         }
-
     }
 
     public function updateGroupItem()
     {
-        if(Request::has('entity') && Request::has('block') && Request::has('id'))
+        if(Request::has('entity') && Request::has('block') && Request::has('group_id'))
         {
             $dataobj = Request::all();
 
             if($dataobj['entity'] == 'groupitem')
             {
                 try {
-                    $groupitem = Group::findOrFail($dataobj['id']);
 
-                    $result = $groupitem->saveGroupItem($dataobj);
+                    $this->dispatch(new UpdateGroupItemCommand($dataobj['group_id'], $dataobj));
 
-                    return ['status'=>$result];
+                    return ['status' => 'OK'];
 
                 } catch(\Exception $exception) {
-                    return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+                    return ['status' => ('Что-то пошло не так. '.$exception->getMessage())];
                 }
             } else {
-                return ['status'=>'Имя сохраняемой сущности не равно group ('.$dataobj['entity'].').'];
+                return ['status' => 'Имя сохраняемой сущности не равно group ('.$dataobj['entity'].').'];
             }
 
         } else {
 
-            return ['status'=>'Не хватает параметров для сохранения.'];
-
+            return ['status' => 'Не хватает параметров для сохранения.'];
         }
     }
 }

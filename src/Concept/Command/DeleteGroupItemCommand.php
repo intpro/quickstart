@@ -2,15 +2,16 @@
 
 class DeleteGroupItemCommand extends Command {
 
-    public $name;
-	/**
-	 * Delete a new command instance.
-	 *
-	 * @return void
-	 */
-	public function __construct($name)
-	{
-		$this->name = $name;
-	}
+    public $group_id;
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct($group_id)
+    {
+        $this->group_id   = $group_id;
+    }
 
 }
