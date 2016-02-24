@@ -1,6 +1,9 @@
 {
     "name": "interpro/quickstorage",
     "description": "Storage logic for quick start",
+    "keywords": [
+        "qstorage"
+    ],
     "license": "MIT",
     "authors": [
         {
