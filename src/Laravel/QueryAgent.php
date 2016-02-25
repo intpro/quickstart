@@ -10,6 +10,7 @@ use Interpro\QuickStorage\Laravel\Collection\GroupCollection;
 use Interpro\QuickStorage\Laravel\Item\BlockItem;
 use Interpro\QuickStorage\Laravel\Item\GroupItem;
 use Interpro\QuickStorage\Laravel\Sorting\GroupSorting;
+use Interpro\QuickStorage\Laravel\Specification\GroupSpecificationEq;
 
 class QueryAgent implements QueryAgentInterface{
 
@@ -50,6 +51,22 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
+    private function setEqSpecs($specs)
+    {
+        foreach($specs as $group_name=>$spec_arr)
+        {
+            if(is_array($spec_arr))
+            {
+                foreach($spec_arr as $field_name=>$spec_val)
+                {
+                    $spec_obj = new GroupSpecificationEq($group_name, $field_name, $spec_val);
+
+                    $this->groupSpecificationSet->add($group_name, $spec_obj);
+                }
+            }
+        }
+    }
+
     /**
      * Получить элемент блока с полями
      *
@@ -61,6 +78,8 @@ class QueryAgent implements QueryAgentInterface{
     public function getBlock($name, $sorts, $specs)
     {
         $this->setSorts($sorts);
+
+        $this->setEqSpecs($specs);
 
         $fields_arr = $this->repository->getBlock($name);
 
@@ -81,6 +100,8 @@ class QueryAgent implements QueryAgentInterface{
     public function getGroup($block_name, $name, $sorts, $specs)
     {
         $this->setSorts($sorts);
+
+        $this->setEqSpecs($specs);
 
         $items_arr = $this->repository->getGroup($block_name, $name);
 

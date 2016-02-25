@@ -12,7 +12,7 @@ class GroupSpecificationEq extends GroupSpecification
     {
         parent::__construct($group_name, $field_name);
 
-        $this->val;
+        $this->val = $val;
     }
 
     /**
@@ -24,8 +24,7 @@ class GroupSpecificationEq extends GroupSpecification
      */
     public function isSatisfiedBy(GroupItem $item)
     {
-
-        $field_name = $this->field_name.'_field';
+        $field_name = $this->field_name;
 
         return ($item->$field_name == $this->val);
     }
@@ -39,7 +38,7 @@ class GroupSpecificationEq extends GroupSpecification
      */
     public function asScope($query)
     {
-        return $query->where($this->getFieldName().'_sfield', '=', $this->val);
+        return $query->where($this->getFieldName(), '=', $this->val);
     }
 
 }

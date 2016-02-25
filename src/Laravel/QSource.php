@@ -8,7 +8,7 @@ use Interpro\QuickStorage\Concept\Exception\BuildQueryException;
 use Interpro\QuickStorage\Concept\QSource as QSourceInterface;
 use Interpro\QuickStorage\Concept\Sorting\GroupSortingSet;
 use Interpro\QuickStorage\Concept\Specification\GroupSpecificationSet;
-use Interpro\QuickStorage\Concept\StorageStructure;
+use Interpro\QuickStorage\Concept\StorageStructure as StorageStructureInterface;
 use Illuminate\Support\Facades\DB;
 
 class QSource implements QSourceInterface
@@ -18,7 +18,7 @@ class QSource implements QSourceInterface
     private $groupSortingSet;
     private $groupSpecificationSet;
 
-    public function __construct(StorageStructure $storageStruct, App $app, GroupSortingSet $groupSortingSet, GroupSpecificationSet $groupSpecificationSet)
+    public function __construct(StorageStructureInterface $storageStruct, App $app, GroupSortingSet $groupSortingSet, GroupSpecificationSet $groupSpecificationSet)
     {
         $this->app           = $app;
         $this->storageStruct = $storageStruct;

@@ -55,10 +55,13 @@ class CreateGroupItemCommandHandler {
             $newGroupItem->owner_id   = $owner_id;
             $newGroupItem->save();
 
-            $dataArr['id'] = $newGroupItem->id;
-            $dataArr['owner_id'] = $newGroupItem->owner_id;
+            $dataArr['id']         = $newGroupItem->id;
+            $dataArr['owner_id']   = $newGroupItem->owner_id;
             $dataArr['block_name'] = $block_name;
             $dataArr['group_name'] = $group_name;
+
+            //По умолчанию предлагаем заполнять слаг этим:
+            $dataArr['slug'] = 'gi_'.$newGroupItem->id;
 
             if(array_key_exists('stringfields', $groupstruct))
             {

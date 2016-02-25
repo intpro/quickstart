@@ -25,6 +25,8 @@ class AdminCreateController extends Controller
 
             $group_item = new GroupItem($dataArr);
 
+            $slug = $group_item->slug_field;
+
             $complhtml = view('back/blocks/groupitems/'.$group, ['item_'.$group => $group_item])->render();
 
 
