@@ -4,7 +4,7 @@ namespace Interpro\QuickStorage\Laravel;
 
 use Interpro\QuickStorage\Concept\Repository as RepositoryInterface;
 use Interpro\QuickStorage\Concept\QSource as QSourceInterface;
-use Interpro\QuickStorage\Concept\StorageStructure;
+use Interpro\QuickStorage\Concept\StorageStructure as StorageStructureInterface;
 
 class Repository implements RepositoryInterface
 {
@@ -16,7 +16,7 @@ class Repository implements RepositoryInterface
     private $groups_ordered;
 
 
-    public function __construct(StorageStructure $storageStruct, QSourceInterface $qSource)
+    public function __construct(StorageStructureInterface $storageStruct, QSourceInterface $qSource)
     {
         $this->qSource = $qSource;
         $this->storageStruct = $storageStruct;
