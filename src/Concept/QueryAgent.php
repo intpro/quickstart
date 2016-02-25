@@ -29,10 +29,10 @@ interface QueryAgent{
      * Получить коллекцию элементов группы по имени
      *
      * @param string $block_name
-     * @param string $name
+     * @param string $group_name
      * @param int $owner_id
      * @return \Interpro\QuickStorage\Concept\Item\GroupItem
      */
-    public function getGroupItem($block_name, $name, $owner_id);
+    public function getGroupItem($block_name, $group_name, $group_id);
 
 }

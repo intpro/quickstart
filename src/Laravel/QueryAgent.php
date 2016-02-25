@@ -114,14 +114,17 @@ class QueryAgent implements QueryAgentInterface{
      * Получить коллекцию элементов группы по имени
      *
      * @param string $block_name
-     * @param string $name
+     * @param string $group_name
      * @param int $group_id
      * @return \Interpro\QuickStorage\Concept\Item\GroupItem
      */
-    public function getGroupItem($block_name, $name, $group_id)
+    public function getGroupItem($block_name, $group_name, $group_id)
     {
-        //Потом
-        return 'еще не реализовано';
+        $item_arr = $this->repository->getGroupItem($block_name, $group_name, $group_id);
+
+        $item = new GroupItem($item_arr);
+
+        return $item;
 
     }
 

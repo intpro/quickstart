@@ -151,7 +151,19 @@ class QSource implements QSourceInterface
         $group_q->where('group_name', '=', $group_name);
         $group_q->where('id', '=', $group_id);
 
-        $collection = $group_q->get();
+        $fields = $this->storageStruct->getGroupFieldsFlat($block_name, $group_name);
+
+        $fields_except = ['id', 'owner_id', 'group_name', 'group_owner_name', 'block_name', 'title', 'slug', 'sorter', 'show'];
+
+        foreach($fields as $field_name)
+        {
+            if(!in_array($field_name, $fields_except))
+            {
+                $this->select_field_for_group($group_q, $block_name, $group_name, $field_name);
+            }
+        }
+
+        $collection = $group_q->get($fields);
 
         if(!$collection->isEmpty())
         {

@@ -5,19 +5,32 @@ namespace Interpro\QuickStorage\Concept;
 interface Repository
 {
     /**
-     * @param string $blockName
+     * @param string $block_name
      *
      * @return mixed
      */
     public function getBlock($block_name);
 
     /**
-     * @param string $blockName
+     * @param string $block_name
      *
-     * @param bool $addshow
+     * @param string $group_name
+     *
+     * @param int $owner_id
      *
      * @return mixed
      */
     public function getGroup($block_name, $group_name, $owner_id=0);
+
+    /**
+     * @param string $block_name
+     *
+     * @param string $group_name
+     *
+     * @param int $group_id
+     *
+     * @return mixed
+     */
+    public function getGroupItem($block_name, $group_name, $group_id);
 
 }
