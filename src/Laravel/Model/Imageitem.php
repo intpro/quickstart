@@ -4,6 +4,8 @@ namespace Interpro\QuickStorage\Laravel\Model;
 
 use Illuminate\Database\Eloquent\Model;
 use Interpro\ImageFileLogic\Laravel\Action\DeleteImageAction;
+use Interpro\QuickStorage\Laravel\Item\ImageItem as InterproImageItem;
+
 
 class Imageitem extends Model
 {
@@ -31,8 +33,8 @@ class Imageitem extends Model
                     //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
                     //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
 
-                    $imageItem = new ImageItem($imageitem->prefix, []);
-                    $imageItem_mod = new ImageItem('mod_'.$imageitem->prefix, []);
+                    $imageItem = new InterproImageItem($imageitem->prefix, ['a'=>1]);
+                    $imageItem_mod = new InterproImageItem('mod_'.$imageitem->prefix, []);
 
                     $delAction = new DeleteImageAction();
 

@@ -2,7 +2,7 @@
 
 namespace Interpro\QuickStorage\Concept;
 
-interface QSource
+interface QSource //Переименовать в Querier
 {
     /**
      * @param string $block_name

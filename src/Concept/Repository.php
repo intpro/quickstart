@@ -2,7 +2,7 @@
 
 namespace Interpro\QuickStorage\Concept;
 
-interface Repository
+interface Repository //Переименовать в ШЛЮЗ!
 {
     /**
      * @param string $block_name
