@@ -61,7 +61,7 @@ class CreateGroupItemCommandHandler {
             $dataArr['group_name'] = $group_name;
 
             //По умолчанию предлагаем заполнять слаг этим:
-            $dataArr['slug'] = 'gi_'.$newGroupItem->id;
+            $dataArr['slug'] = '';
 
             if(array_key_exists('stringfields', $groupstruct))
             {
@@ -69,7 +69,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $stringfield = Stringfield::create(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->stringfields()->save($stringfield);
-                    $dataArr[$fieldname]='';
+                    $dataArr[$fieldname]='поле строковое - '.$fieldname;
                 }
             }
 
@@ -79,7 +79,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $textfield = Textfield::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->textfields()->save($textfield);
-                    $dataArr[$fieldname]='';
+                    $dataArr[$fieldname]='поле текст - '.$fieldname;
                 }
             }
 
@@ -89,7 +89,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $numb = Numb::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->numbs()->save($numb);
-                    $dataArr[$fieldname]='';
+                    $dataArr[$fieldname]=0;
                 }
             }
 
@@ -99,7 +99,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $boolitem = Bool::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->bools()->save($boolitem);
-                    $dataArr[$fieldname]='';
+                    $dataArr[$fieldname]=0;
                 }
             }
 

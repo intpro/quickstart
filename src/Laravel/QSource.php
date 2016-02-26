@@ -173,7 +173,51 @@ class QSource implements QSourceInterface
 
         }else{
 
-            throw new BuildQueryException('Данные элемента группы '.$group_name.'-'.$group_id.' не найдены в базе.');
+            throw new BuildQueryException('Данные элемента группы ('.$group_name.'-'.$group_id.') не найдены в базе.');
+        }
+    }
+
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     * @param string $slug
+     *
+     * @return array
+     */
+    public function groupItemBySlugQuery($block_name, $group_name, $slug)
+    {
+        $model_group = $this->app->make('Interpro\QuickStorage\Laravel\Model\Group');
+
+        $group_q = $model_group->query();
+
+        $group_q->where('block_name', '=', $block_name);
+        $group_q->where('group_name', '=', $group_name);
+        $group_q->where('slug', '=', $slug);
+
+        $fields = $this->storageStruct->getGroupFieldsFlat($block_name, $group_name);
+
+        $fields_except = ['id', 'owner_id', 'group_name', 'group_owner_name', 'block_name', 'title', 'slug', 'sorter', 'show'];
+
+        foreach($fields as $field_name)
+        {
+            if(!in_array($field_name, $fields_except))
+            {
+                $this->select_field_for_group($group_q, $block_name, $group_name, $field_name);
+            }
+        }
+
+        $collection = $group_q->get($fields);
+
+        if(!$collection->isEmpty())
+        {
+            $item_obj = $collection->first();
+
+            return $item_obj->toArray();
+
+        }else{
+
+            throw new BuildQueryException('Данные элемента группы по слагу ('.$group_name.'-'.$slug.') не найдены в базе.');
         }
     }
 

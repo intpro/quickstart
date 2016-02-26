@@ -29,6 +29,15 @@ interface QSource //Переименовать в Querier
 
     /**
      * @param string $block_name
+     * @param string $group_name
+     * @param string $slug
+     *
+     * @return array
+     */
+    public function groupItemBySlugQuery($block_name, $group_name, $slug);
+
+    /**
+     * @param string $block_name
      * @param string $image_name
      *
      * @return array

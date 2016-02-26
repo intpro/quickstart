@@ -57,6 +57,12 @@ class Repository implements RepositoryInterface
         return $this->qSource->groupItemQuery($block_name, $group_name, $group_id);
     }
 
+    //Ничего не кэширующий метод сквозняком в Querer
+    public function getGroupItemBySlug($block_name, $group_name, $slug)
+    {
+        return $this->qSource->groupItemBySlugQuery($block_name, $group_name, $slug);
+    }
+
     private function orderGroup($group_name)
     {
         $ordered = & $this->groups_ordered[$group_name];
