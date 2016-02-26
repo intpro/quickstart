@@ -80,7 +80,7 @@ class AdminCreateController extends Controller
 
             $sizes = $report->getImageReport($resp_name);
 
-            $dataArr['images'] = [$image_name => ['original_link' => $sizes['original']]];
+            $dataArr['images'] = [$image_name => ['prefix'=>$resp_name,'original_link' => $sizes['original']]];
 
             $this->dispatch(new UpdateGroupItemCommand($dataArr['id'], $dataArr));
 
