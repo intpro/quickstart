@@ -14,11 +14,11 @@ class StorageStructure implements StorageStructureInterface
         if (!isset($this->types))
         {
             $this->types = ['stringfields' => 'Interpro\QuickStorage\Laravel\Model\Stringfield',
-                            'textfields' => 'Interpro\QuickStorage\Laravel\Model\Textfield',
-                            'numbs' => 'Interpro\QuickStorage\Laravel\Model\Numb',
-                            'bools' => 'Interpro\QuickStorage\Laravel\Model\Bool',
-                            'pdatetimes' => 'Interpro\QuickStorage\Laravel\Model\Pdatetime',
-                            'images' => 'Interpro\QuickStorage\Laravel\Model\Imageitem'];
+                'textfields' => 'Interpro\QuickStorage\Laravel\Model\Textfield',
+                'numbs' => 'Interpro\QuickStorage\Laravel\Model\Numb',
+                'bools' => 'Interpro\QuickStorage\Laravel\Model\Bool',
+                'pdatetimes' => 'Interpro\QuickStorage\Laravel\Model\Pdatetime',
+                'images' => 'Interpro\QuickStorage\Laravel\Model\Imageitem'];
         }
 
         return $this->types;
@@ -342,6 +342,20 @@ class StorageStructure implements StorageStructureInterface
     public function groupExist($blockName, $groupName)
     {
         $groups_conf = $this->getGroups0level($blockName);
+
+        return array_key_exists($groupName, $groups_conf);
+    }
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
+     * @return bool
+     */
+    public function groupInBlockExist($blockName, $groupName)
+    {
+        $groups_conf = $this->getGroupsFlatConfig($blockName);
 
         return array_key_exists($groupName, $groups_conf);
     }

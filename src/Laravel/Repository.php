@@ -2,6 +2,7 @@
 
 namespace Interpro\QuickStorage\Laravel;
 
+use Interpro\QuickStorage\Concept\Exception\WrongGroupNameException;
 use Interpro\QuickStorage\Concept\Repository as RepositoryInterface;
 use Interpro\QuickStorage\Concept\QSource as QSourceInterface;
 use Interpro\QuickStorage\Concept\StorageStructure as StorageStructureInterface;
@@ -54,7 +55,15 @@ class Repository implements RepositoryInterface
     //Ничего не кэширующий метод сквозняком в Querer
     public function getGroupItem($block_name, $group_name, $group_id)
     {
-        return $this->qSource->groupItemQuery($block_name, $group_name, $group_id);
+        if($this->storageStruct->groupInBlockExist(
+            $block_name,
+            $group_name
+        ))
+        {
+            return $this->qSource->groupItemQuery($block_name, $group_name, $group_id);
+        }else{
+            throw new WrongGroupNameException('Группа '.$group_name.' в составе блока '.$block_name.' не найдена.');
+        }
     }
 
     //Ничего не кэширующий метод сквозняком в Querer

@@ -98,6 +98,15 @@ interface StorageStructure{
      *
      * @param string $groupName
      *
+     * @return bool
+     */
+    public function groupInBlockExist($blockName, $groupName);
+
+    /**
+     * @param string $blockName
+     *
+     * @param string $groupName
+     *
      * @param string $SubGroupName
      *
      * @return bool
