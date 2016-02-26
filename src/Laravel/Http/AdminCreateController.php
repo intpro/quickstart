@@ -3,11 +3,17 @@
 namespace Interpro\QuickStorage\Laravel\Http;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Interpro\ImageFileLogic\Concept\Exception\ImageFileSystemException;
+use Interpro\ImageFileLogic\Concept\Report;
 use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
+use Interpro\QuickStorage\Concept\Command\Image\UpdateOneGroupImageCommand;
 use Interpro\QuickStorage\Concept\Command\InitAllBlockCommand;
 use Interpro\QuickStorage\Concept\Command\InitOneBlockCommand;
 use Illuminate\Support\Facades\DB;
+use Interpro\QuickStorage\Concept\Command\UpdateGroupItemCommand;
 use Interpro\QuickStorage\Laravel\Item\GroupItem;
+use Illuminate\Http\Request;
 
 class AdminCreateController extends Controller
 {
@@ -37,6 +43,63 @@ class AdminCreateController extends Controller
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
         }
     }
+
+
+    public function createGroupImageItem(Request $request, Report $report){
+
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'block_name' => 'required',
+                'group_name' => 'required',
+                'image_name' => 'required'
+            ]
+        );
+
+        if($validator->fails()){
+            return ['success'=>false, 'message'=>$validator->errors()->setFormat(':message<br>')->all()];
+        }
+
+        try{
+
+            $block_name = $request->input('block_name');
+            $group_name = $request->input('group_name');
+            $image_name = $request->input('image_name');
+
+            $dataArr = $this->dispatch(new CreateGroupItemCommand($block_name, $group_name, 0));
+
+            $this->dispatch(
+                new UpdateOneGroupImageCommand(
+                    $block_name,
+                    $group_name,
+                    $image_name,
+                    $dataArr['id'],
+                    $request->file('imagefile')));
+
+            $resp_name = $group_name.'_'.$image_name.'_'.$dataArr['id'];
+
+            $sizes = $report->getImageReport($resp_name);
+
+            $dataArr['images'] = [$image_name => ['original_link' => $sizes['original']]];
+
+            $this->dispatch(new UpdateGroupItemCommand($dataArr['id'], $dataArr));
+
+            $group_item = new GroupItem($dataArr);
+
+            $complhtml = view('back/blocks/groupitems/'.$block_name.'/'.$group_name, ['item_'.$group_name => $group_item])->render();
+
+            $success = true;
+
+            $file = '/images/'.$sizes['original'];
+
+            return compact('success', 'file', 'complhtml');
+
+        }catch (\Exception $exception){
+
+            return ['success'=>false, 'message'=>('Что-то пошло не так. '.$exception->getMessage())];
+        }
+    }
+
 
     public function createInit()
     {
