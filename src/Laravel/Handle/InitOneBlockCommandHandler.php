@@ -103,7 +103,7 @@ class InitOneBlockCommandHandler {
                 {
                     foreach($blockstruct['images'] as $fieldname)
                     {
-                        $image = Imageitem::firstOrCreate(['block_name'=>$blockname, 'name'=>$fieldname]);
+                        $image = Imageitem::firstOrCreate(['block_name'=>$blockname, 'name'=>$fieldname, 'preview_link' => 'placeholder.jpg']);
                     }
                 }
 
