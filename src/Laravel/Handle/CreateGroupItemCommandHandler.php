@@ -68,8 +68,9 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['stringfields'] as $fieldname)
                 {
                     $stringfield = Stringfield::create(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
+                    $stringfield->value = 'поле строковое - '.$fieldname;
                     $newGroupItem->stringfields()->save($stringfield);
-                    $dataArr[$fieldname]='поле строковое - '.$fieldname;
+                    $dataArr[$fieldname] = $stringfield->value;
                 }
             }
 
@@ -78,8 +79,9 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['textfields'] as $fieldname)
                 {
                     $textfield = Textfield::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
+                    $textfield->value = 'поле текст - '.$fieldname;
                     $newGroupItem->textfields()->save($textfield);
-                    $dataArr[$fieldname]='поле текст - '.$fieldname;
+                    $dataArr[$fieldname] = $textfield->value;
                 }
             }
 
@@ -89,7 +91,6 @@ class CreateGroupItemCommandHandler {
                 {
                     $numb = Numb::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->numbs()->save($numb);
-                    $dataArr[$fieldname]=0;
                 }
             }
 
@@ -99,7 +100,6 @@ class CreateGroupItemCommandHandler {
                 {
                     $boolitem = Bool::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->bools()->save($boolitem);
-                    $dataArr[$fieldname]=0;
                 }
             }
 
@@ -119,6 +119,7 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['images'] as $fieldname)
                 {
                     $image = Imageitem::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
+                    $image->preview_link = 'placeholder.jpg';
                     $newGroupItem->images()->save($image);
                     $dataArr[$fieldname]='';
                 }
