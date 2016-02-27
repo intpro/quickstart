@@ -71,7 +71,7 @@ class BlockItem extends EntityItem implements BlockItemInterface
             }
 
         }else{
-            throw new WrongBlockFieldNameException('Поле '.$req_name.' блока '.$this->getField('name').' не найдено в настройке.');
+            throw new WrongBlockFieldNameException('Обращение к полю (группе, картинке) блока ->'.$req_name.' блока '.$this->getField('name').' не соответствует формату bbb->xxx_field.');
         }
 
         return $value;
