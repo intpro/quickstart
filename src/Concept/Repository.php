@@ -27,6 +27,15 @@ interface Repository //Переименовать в ШЛЮЗ!
      *
      * @param string $group_name
      *
+     * @return mixed
+     */
+    public function getGroupFlat($block_name, $group_name);
+
+    /**
+     * @param string $block_name
+     *
+     * @param string $group_name
+     *
      * @param int $group_id
      *
      * @return mixed

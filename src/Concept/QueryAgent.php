@@ -29,6 +29,17 @@ interface QueryAgent{
      * Получить коллекцию элементов группы по имени
      *
      * @param string $block_name
+     * @param string $name
+     * @param array $sorts
+     * @param array $specs
+     * @return \Interpro\QuickStorage\Concept\Collection\GroupCollection
+     */
+    public function getGroupFlat($block_name, $name, $sorts, $specs);
+
+    /**
+     * Получить коллекцию элементов группы по имени
+     *
+     * @param string $block_name
      * @param string $group_name
      * @param int $group_id
      * @return \Interpro\QuickStorage\Concept\Item\GroupItem

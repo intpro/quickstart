@@ -52,6 +52,13 @@ class Repository implements RepositoryInterface
         return $this->groups_ordered[$group_name]['id_'.$owner_id];
     }
 
+    public function getGroupFlat($block_name, $group_name)
+    {
+        $this->checkGroupOwnedExistence($block_name, $group_name);
+
+        return $this->groups_blended[$group_name];
+    }
+
     //Ничего не кэширующий метод сквозняком в Querer
     public function getGroupItem($block_name, $group_name, $group_id)
     {

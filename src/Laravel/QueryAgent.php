@@ -114,6 +114,28 @@ class QueryAgent implements QueryAgentInterface{
      * Получить коллекцию элементов группы по имени
      *
      * @param string $block_name
+     * @param string $name
+     * @param array $sorts
+     * @param array $specs
+     * @return \Interpro\QuickStorage\Concept\Collection\GroupCollection
+     */
+    public function getGroupFlat($block_name, $name, $sorts, $specs)
+    {
+        $this->setSorts($sorts);
+
+        $this->setEqSpecs($specs);
+
+        $items_arr = $this->repository->getGroupFlat($block_name, $name);
+
+        $group_coll = new GroupCollection($block_name, $name, $items_arr);
+
+        return $group_coll;
+    }
+
+    /**
+     * Получить коллекцию элементов группы по имени
+     *
+     * @param string $block_name
      * @param string $group_name
      * @param int $group_id
      * @return \Interpro\QuickStorage\Concept\Item\GroupItem
