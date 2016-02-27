@@ -15,7 +15,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function()
     Route::post('/create_group_image',              ['as' => 'c_gimg_item', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createGroupImageItem']);
 
     //Удаление
-    Route::delete('/delete/groupitem/{id}',         ['as' => 'delete_groupitem', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@deleteGroupItem']);
+    Route::delete('/delete/groupitem/{id}',         ['as' => 'delete_groupitem', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminDeleteController@deleteGroupItem']);
 
 
     //Картинки
