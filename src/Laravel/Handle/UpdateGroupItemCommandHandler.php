@@ -81,32 +81,32 @@ class UpdateGroupItemCommandHandler {
                             if(array_key_exists($fieldname, $data_fs)){
 
                                 if($typename == 'stringfields'){
-                                    $field = Stringfield::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Stringfield::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
                                     $field->value = $data_fs[$fieldname];
                                     $group_item->stringfields()->save($field);
 
                                 }else if($typename == 'textfields'){
-                                    $field = Textfield::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Textfield::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
                                     $field->value = $data_fs[$fieldname];
                                     $group_item->textfields()->save($field);
 
                                 }else if($typename == 'numbs'){
-                                    $field = Numb::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Numb::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
                                     $field->value = $data_fs[$fieldname];
                                     $group_item->numbs()->save($field);
 
                                 }else if($typename == 'bools'){
-                                    $field = Bool::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Bool::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
                                     $field->value = $data_fs[$fieldname] == "true" ? true : false;
                                     $group_item->bools()->save($field);
 
                                 }else if($typename == 'pdatetimes'){
-                                    $field = Pdatetime::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Pdatetime::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
                                     $field->value = $data_fs[$fieldname];
                                     $group_item->pdatetimes()->save($field);
 
                                 }else if($typename == 'images'){
-                                    $field = Imageitem::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id]);
+                                    $field = Imageitem::firstOrNew(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
 
                                     if(array_key_exists('alt', $data_fs[$fieldname])){
                                         $field->alt = $data_fs[$fieldname]['alt'];

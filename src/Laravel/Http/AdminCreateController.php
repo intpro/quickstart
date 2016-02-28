@@ -11,6 +11,8 @@ use Interpro\QuickStorage\Concept\Command\Image\UpdateOneGroupImageCommand;
 use Interpro\QuickStorage\Concept\Command\InitAllBlockCommand;
 use Interpro\QuickStorage\Concept\Command\InitOneBlockCommand;
 use Illuminate\Support\Facades\DB;
+use Interpro\QuickStorage\Concept\Command\ReinitGroupCommand;
+use Interpro\QuickStorage\Concept\Command\ReinitOneBlockCommand;
 use Interpro\QuickStorage\Concept\Command\UpdateGroupItemCommand;
 use Interpro\QuickStorage\Laravel\Item\GroupItem;
 use Illuminate\Http\Request;
@@ -134,6 +136,38 @@ class AdminCreateController extends Controller
 
             $this->dispatch(
                 new InitOneBlockCommand($block_name)
+            );
+
+        } catch(\Exception $exception) {
+
+            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+        }
+
+        return ['status'=>'OK'];
+    }
+
+    public function reinitBlock($block_name)
+    {
+        try {
+
+            $this->dispatch(
+                new ReinitOneBlockCommand($block_name)
+            );
+
+        } catch(\Exception $exception) {
+
+            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+        }
+
+        return ['status'=>'OK'];
+    }
+
+    public function reinitGroup($block_name, $group_name)
+    {
+        try {
+
+            $this->dispatch(
+                new ReinitGroupCommand($block_name, $group_name)
             );
 
         } catch(\Exception $exception) {

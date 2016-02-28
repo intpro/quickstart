@@ -2,8 +2,10 @@
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function()
 {
-    Route::get('/init/{block}',              ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInitBlock']);
-    Route::get('/init',                      ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInit']);
+    Route::get('/init/{block}',                 ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInitBlock']);
+    Route::get('/reinit_block/{block}',         ['as' => 'ri_block',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitBlock']);
+    Route::get('/reinit_group/{block}/{group}', ['as' => 'ri_group',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitGroup']);
+    Route::get('/init',                         ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInit']);
 
     //Для групп внутри блоков:
     Route::get('/create/groupitem/{block}/{group}/{owner_id}', ['as' => 'create_groupitem', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createGroupItem']);

@@ -26,10 +26,12 @@ class QuickStorageServiceProvider extends ServiceProvider {
             'Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand' => 'Interpro\QuickStorage\Laravel\Handle\CreateGroupItemCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\UpdateGroupItemCommand' => 'Interpro\QuickStorage\Laravel\Handle\UpdateGroupItemCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\DeleteGroupItemCommand' => 'Interpro\QuickStorage\Laravel\Handle\DeleteGroupItemCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\ReinitGroupCommand'     => 'Interpro\QuickStorage\Laravel\Handle\ReinitGroupCommandHandler@handle',
 
             'Interpro\QuickStorage\Concept\Command\InitAllBlockCommand' => 'Interpro\QuickStorage\Laravel\Handle\InitAllBlockCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\InitOneBlockCommand' => 'Interpro\QuickStorage\Laravel\Handle\InitOneBlockCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\UpdateBlockCommand'  => 'Interpro\QuickStorage\Laravel\Handle\UpdateBlockCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\ReinitOneBlockCommand'  => 'Interpro\QuickStorage\Laravel\Handle\ReinitOneBlockCommandHandler@handle',
 
 
             'Interpro\QuickStorage\Concept\Command\Image\RefreshAllGroupImageCommand' => 'Interpro\QuickStorage\Laravel\Handle\Image\RefreshAllGroupImageCommandHandler@handle',
