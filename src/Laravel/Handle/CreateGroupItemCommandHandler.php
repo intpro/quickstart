@@ -130,10 +130,12 @@ class CreateGroupItemCommandHandler {
 
             //Присваеваем полю сортировщика +1
             $query = \Interpro\QuickStorage\Laravel\Model\Group::query();
+            $query->where('id', '=', $newGroupItem->id);
             $query->where('owner_id', '=', $owner_id);
             $query->where('group_name', '=', $group_name);
 
-            $sorter_query = \Interpro\QuickStorage\Laravel\Model\Group::selectRaw('MAX(sorter)+1 AS next_sorter, owner_id as o_id')->whereRaw('owner_id = '.$owner_id);
+            $sorter_query = \Interpro\QuickStorage\Laravel\Model\Group::selectRaw('MAX(sorter)+1 AS next_sorter, owner_id as o_id')
+                ->whereRaw('owner_id = '.$owner_id)->whereRaw('group_name = "'.$group_name.'"');
 
             $query->leftJoin(DB::raw('('.$sorter_query->toSql().') AS srt'), function($join)
             {
