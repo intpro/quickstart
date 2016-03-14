@@ -39,16 +39,16 @@ class ReinitGroupCommandHandler {
     {
         $items = Group::where('group_name', '=', $group_name)->get();
 
+        $qstorage = config('qstorage');
+
         foreach($items as $item)
         {
             $block_name = $item->block_name;
             $group_id = $item->id;
 
-            $qstorage = config('qstorage');
-
             if(array_key_exists($block_name, $qstorage))
             {
-                $groupstruct = config('qstorage')[$block_name]['groups'][$group_name];
+                $groupstruct = $qstorage[$block_name]['groups'][$group_name];
 
                 foreach(['stringfields', 'textfields', 'numbs', 'images', 'bools', 'pdatetimes'] as $typename) {
 

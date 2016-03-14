@@ -1,5 +1,6 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
 use Interpro\QuickStorage\Concept\StorageStructure;
@@ -125,6 +126,23 @@ class CreateGroupItemCommandHandler {
                 }
             }
             $newGroupItem->save();
+
+
+            //Присваеваем полю сортировщика +1
+            $query = \Interpro\QuickStorage\Laravel\Model\Group::query();
+            $query->where('owner_id', '=', $owner_id);
+            $query->where('group_name', '=', $group_name);
+
+            $sorter_query = \Interpro\QuickStorage\Laravel\Model\Group::selectRaw('MAX(sorter)+1 AS next_sorter, owner_id as o_id')->whereRaw('owner_id = '.$owner_id);
+
+            $query->leftJoin(DB::raw('('.$sorter_query->toSql().') AS srt'), function($join)
+            {
+                $join->on('srt.o_id', '=', 'owner_id');
+            });
+
+            $query->update(['sorter' => DB::raw('srt.next_sorter')]);
+            //--------------------------------------------------------------
+
 
             $dataArr['groups'] = array_fill_keys($groupstruct_invert[$group_name], []);
 
