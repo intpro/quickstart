@@ -26,7 +26,13 @@
     composer require interpro/fidback 1.0.x-dev
 
 ---
-5\. ServicProvider
+5\. Установка пакета генератора админ панели
+
+
+    composer require interpro/admingenerator 1.0.x-dev
+
+---
+6\. ServicProvider
 
 Необходимо в файле app.php (/config/app.php) в providers прописывать следующий провайдеры
 
@@ -40,7 +46,7 @@
     php artisan vendor:publish
 ```
 ---
-6\. Config файлы проекта
+7\. Config файлы проекта
     
 - [Правила разметки конфига qstorage](https://github.com/KocaHocTpa/quickstart/blob/master/config.md)
 - [Правила разметки конфига resize](http://example.com)
