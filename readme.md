@@ -40,6 +40,7 @@
     'Interpro\ImageFileLogic\ImageFileLogicServiceProvider',
     'Interpro\Fidback\FidbackServiceProvider',
     'Intervention\Image\ImageServiceProvider',
+    'Interpro\AdminGenerator\AdminGeneratorServiceProvider'
     
 Затем из консоли выполнить следующую команду 
 ```
