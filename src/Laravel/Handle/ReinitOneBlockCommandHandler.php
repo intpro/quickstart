@@ -104,7 +104,12 @@ class ReinitOneBlockCommandHandler {
         {
             foreach($blockstruct['images'] as $fieldname)
             {
-                $image = Imageitem::firstOrCreate(['block_name'=>$block_name, 'name'=>$fieldname, 'preview_link' => 'placeholder.jpg']);
+                $image = Imageitem::firstOrCreate(['block_name'=>$block_name, 'name'=>$fieldname]);
+                if(!$image->preview_link)
+                {
+                    $image->preview_link = 'placeholder.jpg';
+                    $image->save();
+                }
             }
         }
 
