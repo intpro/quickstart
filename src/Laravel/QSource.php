@@ -5,6 +5,7 @@ namespace Interpro\QuickStorage\Laravel;
 use Illuminate\Container\Container as App;
 use Illuminate\Support\Facades\Log;
 use Interpro\QuickStorage\Concept\Exception\BuildQueryException;
+use Interpro\QuickStorage\Concept\Param\GroupParam;
 use Interpro\QuickStorage\Concept\QSource as QSourceInterface;
 use Interpro\QuickStorage\Concept\Sorting\GroupSortingSet;
 use Interpro\QuickStorage\Concept\Specification\GroupSpecificationSet;
@@ -17,13 +18,15 @@ class QSource implements QSourceInterface
     private $app;
     private $groupSortingSet;
     private $groupSpecificationSet;
+    private $groupParam;
 
-    public function __construct(StorageStructureInterface $storageStruct, App $app, GroupSortingSet $groupSortingSet, GroupSpecificationSet $groupSpecificationSet)
+    public function __construct(StorageStructureInterface $storageStruct, App $app, GroupSortingSet $groupSortingSet, GroupSpecificationSet $groupSpecificationSet, GroupParam $groupParam)
     {
         $this->app           = $app;
         $this->storageStruct = $storageStruct;
         $this->groupSortingSet = $groupSortingSet;
         $this->groupSpecificationSet = $groupSpecificationSet;
+        $this->groupParam = $groupParam;
     }
 
     private function select_field_for_block($query, $block_name, $field_name)
@@ -130,6 +133,11 @@ class QSource implements QSourceInterface
         {
             $spec->apply($group_q);
         }
+
+        //Применить параметры
+        $this->groupParam->apply($group_name, $group_q);
+
+
 
         return $group_q->get($fields)->toArray();
     }

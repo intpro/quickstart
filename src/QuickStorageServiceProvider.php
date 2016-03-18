@@ -81,6 +81,11 @@ class QuickStorageServiceProvider extends ServiceProvider {
         );
 
         $this->app->singleton(
+            'Interpro\QuickStorage\Concept\Param\GroupParam',
+            'Interpro\QuickStorage\Laravel\Param\GroupParam'
+        );
+
+        $this->app->singleton(
             'Interpro\QuickStorage\Concept\QueryAgent',
             'Interpro\QuickStorage\Laravel\QueryAgent'
         );

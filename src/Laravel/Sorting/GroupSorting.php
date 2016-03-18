@@ -32,7 +32,7 @@ class GroupSorting implements GroupSortingInterface
      *
      * @param $query
      *
-     * @return mixed
+     * @return void
      */
     public function apply($query)
     {

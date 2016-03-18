@@ -2,6 +2,7 @@
 
 namespace Interpro\QuickStorage\Laravel;
 
+use Interpro\QuickStorage\Concept\Param\GroupParam;
 use Interpro\QuickStorage\Concept\QueryAgent as QueryAgentInterface;
 use Interpro\QuickStorage\Concept\Repository;
 use Interpro\QuickStorage\Concept\Sorting\GroupSortingSet;
@@ -17,22 +18,26 @@ class QueryAgent implements QueryAgentInterface{
     private $repository;
     private $groupSortingSet;
     private $groupSpecificationSet;
+    private $groupParam;
 
     /**
      * @param  \Interpro\QuickStorage\Concept\StorageStructure $storageStructure
      * @param  \Interpro\QuickStorage\Concept\Repository $repository
      * @param  \Interpro\QuickStorage\Concept\Sorting\GroupSortingSet $groupSortingSet
      * @param  \Interpro\QuickStorage\Concept\Specification\GroupSpecificationSet $groupSpecificationSet
+     * @param  \Interpro\QuickStorage\Concept\Param\GroupParam $groupParam
      * @return void
      */
     public function __construct(
         Repository $repository,
         GroupSortingSet $groupSortingSet,
-        GroupSpecificationSet $groupSpecificationSet
+        GroupSpecificationSet $groupSpecificationSet,
+        GroupParam $groupParam
     ){
         $this->repository = $repository;
         $this->groupSortingSet = $groupSortingSet;
         $this->groupSpecificationSet = $groupSpecificationSet;
+        $this->groupParam = $groupParam;
     }
 
     private function setSorts($sorts)
@@ -67,19 +72,36 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
+    private function setParams($params)
+    {
+        foreach($params as $group_name=>$param_arr)
+        {
+            if(is_array($param_arr))
+            {
+                foreach($param_arr as $param_name=>$param_val)
+                {
+                    $this->groupParam->set($group_name, $param_name, $param_val);
+                }
+            }
+        }
+    }
+
     /**
      * Получить элемент блока с полями
      *
      * @param string $name
      * @param array $sorts
      * @param array $specs
+     * @param array $params
      * @return \Interpro\QuickStorage\Concept\Item\BlockItem
      */
-    public function getBlock($name, $sorts, $specs)
+    public function getBlock($name, $sorts, $specs, $params=[])
     {
         $this->setSorts($sorts);
 
         $this->setEqSpecs($specs);
+
+        $this->setParams($params);
 
         $fields_arr = $this->repository->getBlock($name);
 
@@ -95,13 +117,16 @@ class QueryAgent implements QueryAgentInterface{
      * @param string $name
      * @param array $sorts
      * @param array $specs
+     * @param array $params
      * @return \Interpro\QuickStorage\Concept\Collection\GroupCollection
      */
-    public function getGroup($block_name, $name, $sorts, $specs)
+    public function getGroup($block_name, $name, $sorts, $specs, $params=[])
     {
         $this->setSorts($sorts);
 
         $this->setEqSpecs($specs);
+
+        $this->setParams($params);
 
         $items_arr = $this->repository->getGroup($block_name, $name);
 
@@ -117,13 +142,16 @@ class QueryAgent implements QueryAgentInterface{
      * @param string $name
      * @param array $sorts
      * @param array $specs
+     * @param array $params
      * @return \Interpro\QuickStorage\Concept\Collection\GroupCollection
      */
-    public function getGroupFlat($block_name, $name, $sorts, $specs)
+    public function getGroupFlat($block_name, $name, $sorts, $specs, $params=[])
     {
         $this->setSorts($sorts);
 
         $this->setEqSpecs($specs);
+
+        $this->setParams($params);
 
         $items_arr = $this->repository->getGroupFlat($block_name, $name);
 
