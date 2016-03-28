@@ -32,6 +32,16 @@ interface QueryAgent{
      *
      * @param string $block_name
      * @param string $name
+     * @param array $specs
+     * @return int
+     */
+    public function getGroupCount($block_name, $name, $specs);
+
+    /**
+     * Получить коллекцию элементов группы по имени
+     *
+     * @param string $block_name
+     * @param string $name
      * @param array $sorts
      * @param array $specs
      * @param array $params

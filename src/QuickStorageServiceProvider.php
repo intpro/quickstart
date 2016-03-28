@@ -90,6 +90,11 @@ class QuickStorageServiceProvider extends ServiceProvider {
             'Interpro\QuickStorage\Laravel\QueryAgent'
         );
 
+        $this->app->singleton(
+            'Interpro\QuickStorage\Concept\PaginalQueryAgent',
+            'Interpro\QuickStorage\Laravel\PaginalQueryAgent'
+        );
+
         // Let Laravel Ioc Container know about our Controller
         $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminCreateController');
         $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminUpdateController');

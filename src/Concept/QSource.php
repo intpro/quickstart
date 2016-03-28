@@ -21,6 +21,14 @@ interface QSource //Переименовать в Querier
     /**
      * @param string $block_name
      * @param string $group_name
+     *
+     * @return array
+     */
+    public function groupCount($block_name, $group_name);
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
      * @param int $group_id
      *
      * @return array

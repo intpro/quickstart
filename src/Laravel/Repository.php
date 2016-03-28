@@ -52,6 +52,17 @@ class Repository implements RepositoryInterface
         return $this->groups_ordered[$group_name]['id_'.$owner_id];
     }
 
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     *
+     * @return int
+     */
+    public function getGroupCount($block_name, $group_name)
+    {
+        return $this->qSource->groupCount($block_name, $group_name);
+    }
+
     public function getGroupFlat($block_name, $group_name)
     {
         $this->checkGroupOwnedExistence($block_name, $group_name);

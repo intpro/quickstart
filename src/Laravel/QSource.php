@@ -97,6 +97,7 @@ class QSource implements QSourceInterface
 
     /**
      * @param string $block_name
+     * @param string $group_name
      *
      * @return array
      */
@@ -140,6 +141,43 @@ class QSource implements QSourceInterface
 
 
         return $group_q->get($fields)->toArray();
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     *
+     * @return array
+     */
+    public function groupCount($block_name, $group_name)
+    {
+        $model_group = $this->app->make('Interpro\QuickStorage\Laravel\Model\Group');
+
+        $group_q = $model_group->query();
+
+        $group_q->where('group_name', '=', $group_name);
+
+        $fields = $this->storageStruct->getGroupFieldsFlat($block_name, $group_name);
+
+        //Условия могут быть на любое из полей, поэтому подсоединим все
+        $fields_except = ['id', 'owner_id', 'group_name', 'group_owner_name', 'block_name', 'title', 'slug', 'sorter', 'show'];
+
+        foreach($fields as $field_name)
+        {
+            if(!in_array($field_name, $fields_except))
+            {
+                $this->select_field_for_group($group_q, $block_name, $group_name, $field_name);
+            }
+        }
+
+        //Условия
+        $this->groupSpecificationSet->setCurrentGroup($group_name);
+        foreach($this->groupSpecificationSet as $spec)
+        {
+            $spec->asScope($group_q);
+        }
+
+        return $group_q->count();
     }
 
     /**

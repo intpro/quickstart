@@ -13,7 +13,6 @@ interface GroupSortingSet extends \Iterator
      */
     public function add($group_name, GroupSorting $sorting);
 
-
     /**
      * @param string $group_name
      *
@@ -21,4 +20,9 @@ interface GroupSortingSet extends \Iterator
      */
     public function setCurrentGroup($group_name);
 
+    /**
+     * @param string $group_name
+     * @return void
+     */
+    public function reset($group_name);
 }

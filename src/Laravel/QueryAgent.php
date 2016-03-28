@@ -15,7 +15,7 @@ use Interpro\QuickStorage\Laravel\Specification\GroupSpecificationEq;
 
 class QueryAgent implements QueryAgentInterface{
 
-    private $repository;
+    protected $repository;
     private $groupSortingSet;
     private $groupSpecificationSet;
     private $groupParam;
@@ -40,10 +40,12 @@ class QueryAgent implements QueryAgentInterface{
         $this->groupParam = $groupParam;
     }
 
-    private function setSorts($sorts)
+    protected function setSorts($sorts)
     {
         foreach($sorts as $group_name=>$sort_arr)
         {
+            $this->groupSortingSet->reset($group_name);
+
             if(is_array($sort_arr))
             {
                 foreach($sort_arr as $field_name=>$sort_way)
@@ -56,10 +58,12 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
-    private function setEqSpecs($specs)
+    protected function setEqSpecs($specs)
     {
         foreach($specs as $group_name=>$spec_arr)
         {
+            $this->groupSpecificationSet->reset($group_name);
+
             if(is_array($spec_arr))
             {
                 foreach($spec_arr as $field_name=>$spec_val)
@@ -72,7 +76,7 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
-    private function setParams($params)
+    protected function setParams($params)
     {
         foreach($params as $group_name=>$param_arr)
         {
@@ -133,6 +137,21 @@ class QueryAgent implements QueryAgentInterface{
         $group_coll = new GroupCollection($block_name, $name, $items_arr);
 
         return $group_coll;
+    }
+
+    /**
+     * Получить коллекцию элементов группы по имени
+     *
+     * @param string $block_name
+     * @param string $name
+     * @param array $specs
+     * @return int
+     */
+    public function getGroupCount($block_name, $name, $specs)
+    {
+        $this->setEqSpecs($specs);
+
+        $this->repository->getGroupCount($block_name, $name);
     }
 
     /**

@@ -24,6 +24,14 @@ interface Repository //Переименовать в ШЛЮЗ!
 
     /**
      * @param string $block_name
+     * @param string $group_name
+     *
+     * @return int
+     */
+    public function getGroupCount($block_name, $group_name);
+
+    /**
+     * @param string $block_name
      *
      * @param string $group_name
      *

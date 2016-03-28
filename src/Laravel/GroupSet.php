@@ -68,5 +68,14 @@ trait GroupSet
         }
     }
 
+    public function reset($group_name)
+    {
+        if(array_key_exists($group_name, $this->items))
+        {
+            $this->items[$group_name] = [];
+            $this->keys[$group_name] = [];
+        }
+    }
+
 
 }
