@@ -4,7 +4,7 @@ namespace Interpro\QuickStorage\Laravel;
 
 use Interpro\QuickStorage\Concept\Param\GroupParam;
 use Interpro\QuickStorage\Concept\QueryAgent as QueryAgentInterface;
-use Interpro\QuickStorage\Concept\Repository;
+use Interpro\QuickStorage\Concept\Repository as RepositoryInterface;
 use Interpro\QuickStorage\Concept\Sorting\GroupSortingSet;
 use Interpro\QuickStorage\Concept\Specification\GroupSpecificationSet;
 use Interpro\QuickStorage\Laravel\Collection\GroupCollection;
@@ -29,7 +29,7 @@ class QueryAgent implements QueryAgentInterface{
      * @return void
      */
     public function __construct(
-        Repository $repository,
+        RepositoryInterface $repository,
         GroupSortingSet $groupSortingSet,
         GroupSpecificationSet $groupSpecificationSet,
         GroupParam $groupParam
