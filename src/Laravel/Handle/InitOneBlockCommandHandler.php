@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Log;
+use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
 use Interpro\QuickStorage\Concept\Command\Command;
 use Interpro\QuickStorage\Laravel\Model\Block;
 use Interpro\QuickStorage\Laravel\Model\Bool;
@@ -13,14 +14,16 @@ use Interpro\QuickStorage\Laravel\Model\Textfield;
 
 class InitOneBlockCommandHandler {
 
+    private $imageLogicAgent;
+
     /**
      * Create the command handler.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ImageLogicAgent $imageLogicAgent)
     {
-        //
+        $this->imageLogicAgent = $imageLogicAgent;
     }
 
     /**
@@ -103,7 +106,17 @@ class InitOneBlockCommandHandler {
                 {
                     foreach($blockstruct['images'] as $fieldname)
                     {
-                        $image = Imageitem::firstOrCreate(['block_name'=>$blockname, 'name'=>$fieldname, 'preview_link' => 'placeholder.jpg']);
+                        $image_name = $blockname.'_'.$fieldname;
+
+                        $image = Imageitem::firstOrNew(['block_name'=>$blockname, 'name'=>$fieldname]);
+
+                        $image->preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
+                        $image->primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                        $image->original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                        $image->secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
+                        $image->icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
+
+                        $image->save();
                     }
                 }
 

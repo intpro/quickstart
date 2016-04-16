@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Log;
+use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
 use Interpro\QuickStorage\Concept\Command\Command;
 use Interpro\QuickStorage\Concept\Exception\WrongBlockNameException;
 use Interpro\QuickStorage\Laravel\Model\Block;
@@ -14,14 +15,16 @@ use Interpro\QuickStorage\Laravel\Model\Textfield;
 
 class ReinitOneBlockCommandHandler {
 
+    private $imageLogicAgent;
+
     /**
      * Create the command handler.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ImageLogicAgent $imageLogicAgent)
     {
-        //
+        $this->imageLogicAgent = $imageLogicAgent;
     }
 
     /**
@@ -104,12 +107,23 @@ class ReinitOneBlockCommandHandler {
         {
             foreach($blockstruct['images'] as $fieldname)
             {
-                $image = Imageitem::firstOrCreate(['block_name'=>$block_name, 'name'=>$fieldname]);
-                if(!$image->preview_link)
-                {
-                    $image->preview_link = 'placeholder.jpg';
-                    $image->save();
-                }
+                $image_name = $block_name.'_'.$fieldname;
+
+                $preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
+                $primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                $original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                $secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
+                $icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
+
+                $image = Imageitem::firstOrCreate([
+                    'block_name'=>$block_name,
+                    'name'=>$fieldname,
+                    'preview_link'=>$preview_link,
+                    'primary_link'=>$primary_link,
+                    'original_link'=>$original_link,
+                    'secondary_link'=>$secondary_link,
+                    'icon_link'=>$icon_link
+                ]);
             }
         }
 

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
+use Interpro\Placeholder\Concept\PlaceholderAgent;
 use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
 use Interpro\QuickStorage\Concept\StorageStructure;
 use Interpro\QuickStorage\Laravel\Model\Block;
@@ -15,6 +17,7 @@ use Interpro\QuickStorage\Laravel\Model\Textfield;
 class CreateGroupItemCommandHandler {
 
     private $storageStructure;
+    private $imageLogicAgent;
 
 
     /**
@@ -22,9 +25,10 @@ class CreateGroupItemCommandHandler {
      *
      * @return void
      */
-    public function __construct(StorageStructure $storageStructure)
+    public function __construct(StorageStructure $storageStructure, ImageLogicAgent $imageLogicAgent)
     {
         $this->storageStructure = $storageStructure;
+        $this->imageLogicAgent = $imageLogicAgent;
     }
 
     /**
@@ -120,7 +124,15 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['images'] as $fieldname)
                 {
                     $image = Imageitem::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
-                    $image->preview_link = 'placeholder.jpg';
+
+                    $image_name = $group_name.'_'.$fieldname;
+
+                    $image->preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
+                    $image->primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                    $image->original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                    $image->secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
+                    $image->icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
+
                     $newGroupItem->images()->save($image);
                     $dataArr[$fieldname]='';
                 }
