@@ -11,6 +11,7 @@ use Interpro\QuickStorage\Laravel\Collection\GroupCollection;
 use Interpro\QuickStorage\Laravel\Item\BlockItem;
 use Interpro\QuickStorage\Laravel\Item\GroupItem;
 use Interpro\QuickStorage\Laravel\Sorting\GroupSorting;
+use Interpro\QuickStorage\Laravel\Sorting\RandomGroupSorting;
 use Interpro\QuickStorage\Laravel\Specification\GroupSpecificationEq;
 
 class QueryAgent implements QueryAgentInterface{
@@ -50,7 +51,12 @@ class QueryAgent implements QueryAgentInterface{
             {
                 foreach($sort_arr as $field_name=>$sort_way)
                 {
-                    $sort_obj = new GroupSorting($group_name, $field_name, $sort_way);
+                    if($field_name == 'random')
+                    {
+                        $sort_obj = new RandomGroupSorting($group_name);
+                    }else{
+                        $sort_obj = new GroupSorting($group_name, $field_name, $sort_way);
+                    }
 
                     $this->groupSortingSet->add($group_name, $sort_obj);
                 }

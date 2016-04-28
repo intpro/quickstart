@@ -39,7 +39,17 @@ class QuickStorageServiceProvider extends ServiceProvider {
             'Interpro\QuickStorage\Concept\Command\Image\RefreshOneGroupImageCommand' => 'Interpro\QuickStorage\Laravel\Handle\Image\RefreshOneGroupImageCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\Image\UpdateAllGroupImageCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Image\UpdateAllGroupImageCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\Image\UpdateBlockImageCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Image\UpdateBlockImageCommandHandler@handle',
-            'Interpro\QuickStorage\Concept\Command\Image\UpdateOneGroupImageCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Image\UpdateOneGroupImageCommandHandler@handle'
+            'Interpro\QuickStorage\Concept\Command\Image\UpdateOneGroupImageCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Image\UpdateOneGroupImageCommandHandler@handle',
+
+            'Interpro\QuickStorage\Concept\Command\Crop\InitAllBlockCropCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Crop\InitAllBlockCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\InitGroupCropCommand'        => 'Interpro\QuickStorage\Laravel\Handle\Crop\InitGroupCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\InitOneBlockCropCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Crop\InitOneBlockCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\InitOneGroupCropCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Crop\InitOneGroupCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\RefreshAllGroupCropCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Crop\RefreshAllGroupCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\RefreshBlockCropCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Crop\RefreshBlockCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\RefreshOneGroupCropCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Crop\RefreshOneGroupCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\UpdateBlockCropCommand'      => 'Interpro\QuickStorage\Laravel\Handle\Crop\UpdateBlockCropCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Crop\UpdateOneGroupCropCommand'   => 'Interpro\QuickStorage\Laravel\Handle\Crop\UpdateOneGroupCropCommandHandler@handle'
         ]);
     }
 
@@ -58,6 +68,11 @@ class QuickStorageServiceProvider extends ServiceProvider {
         $this->app->singleton(
             'Interpro\QuickStorage\Concept\Repository',
             'Interpro\QuickStorage\Laravel\Repository'
+        );
+
+        $this->app->singleton(
+            'Interpro\QuickStorage\Concept\CropRepository',
+            'Interpro\QuickStorage\Laravel\CropRepository'
         );
 
         $this->app->singleton(

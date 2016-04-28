@@ -4,6 +4,7 @@ namespace Interpro\QuickStorage\Laravel\Item;
 
 use Interpro\ImageFileLogic\Concept\Item\ImageItem as ImageItemInterface;
 use Interpro\QuickStorage\Concept\Exception\WrongImageFieldException;
+use Illuminate\Support\Facades\App;
 
 class ImageItem implements ImageItemInterface
 {
@@ -28,6 +29,8 @@ class ImageItem implements ImageItemInterface
     private $ext;
     private $image_name;
 
+    private $crop_repository;
+
     /**
      * string $name
      * array $fields
@@ -49,16 +52,37 @@ class ImageItem implements ImageItemInterface
                 $this->$field_name = $fields[$field_name];
             }
         }
+
+        $this->crop_repository = App::make('Interpro\QuickStorage\Concept\CropRepository');
     }
 
     public function __get($req_name)
     {
-        if(in_array($req_name, $this->names))
-        {
-            return $this->$req_name;
+        if (substr($req_name, -4) == 'crop'){
+
+            $crop_name = substr($req_name, 0, -5); //+прочерк между именем и image
+
+            $crop = $this->getCrop($crop_name);
+
+            return $crop;
         }else{
-            throw new WrongImageFieldException('Обращение к несуществующему полю '.$req_name.' картинки '.$this->image_name);
+            //Собственное поле
+            if(in_array($req_name, $this->names))
+            {
+                return $this->$req_name;
+            }else{
+                throw new WrongImageFieldException('Обращение к несуществующему полю '.$req_name.' картинки '.$this->image_name);
+            }
         }
+    }
+
+    private function getCrop($crop_name)
+    {
+        $i_name = $this->name;
+
+        $crop_item = $this->crop_repository->getCrop($this->block_name, $this->group_name, $i_name, $crop_name, $this->group_id);
+
+        return $crop_item;
     }
 
     public function getName()
@@ -80,5 +104,6 @@ class ImageItem implements ImageItemInterface
     {
         $this->ext = $ext;
     }
+
 
 }

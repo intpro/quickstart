@@ -23,11 +23,24 @@ class Imageitem extends Model
         return $this->belongsTo('Interpro\QuickStorage\Laravel\Model\Group', 'group_id');
     }
 
+    public function crops()
+    {
+        return $this->hasMany('Interpro\QuickStorage\Laravel\Model\Cropitem', 'image_id');
+    }
+
+
     protected static function boot(){
 
         self::deleted(
             function(Imageitem $imageitem)
             {
+                //Удаляем подчиненные кропы
+                $crops = Cropitem::where('image_id', '=', $imageitem->id)->get();
+                foreach($crops as $field){
+                    $field->delete();
+                }
+
+                //Удаление файлов картинок (вместе с кропами)
                 if(trim($imageitem->prefix) !== '')
                 {
                     //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);

@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Validator;
 use Interpro\ImageFileLogic\Concept\Exception\ImageFileSystemException;
 use Interpro\ImageFileLogic\Concept\Report;
 use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
+use Interpro\QuickStorage\Concept\Command\Crop\InitAllBlockCropCommand;
+use Interpro\QuickStorage\Concept\Command\Crop\InitGroupCropCommand;
+use Interpro\QuickStorage\Concept\Command\Crop\InitOneBlockCropCommand;
+use Interpro\QuickStorage\Concept\Command\Crop\InitOneGroupCropCommand;
 use Interpro\QuickStorage\Concept\Command\Image\UpdateOneGroupImageCommand;
 use Interpro\QuickStorage\Concept\Command\InitAllBlockCommand;
 use Interpro\QuickStorage\Concept\Command\InitOneBlockCommand;
@@ -30,6 +34,8 @@ class AdminCreateController extends Controller
         try {
 
             $dataArr = $this->dispatch(new CreateGroupItemCommand($block, $group, $owner_id));
+
+            $this->dispatch(new InitOneGroupCropCommand($block, $group, $dataArr['id']));
 
             $group_item = new GroupItem($dataArr);
 
@@ -86,6 +92,8 @@ class AdminCreateController extends Controller
 
             $this->dispatch(new UpdateGroupItemCommand($dataArr['id'], $dataArr));
 
+            $this->dispatch(new InitOneGroupCropCommand($block_name, $group_name, $dataArr['id']));
+
             $group_item = new GroupItem($dataArr);
 
             $complhtml = view('back/blocks/groupitems/'.$block_name.'/'.$group_name, ['item_'.$group_name => $group_item])->render();
@@ -122,6 +130,8 @@ class AdminCreateController extends Controller
                 new InitAllBlockCommand()
             );
 
+            $this->dispatch(new InitAllBlockCropCommand());
+
         } catch(\Exception $exception) {
 
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
@@ -137,6 +147,8 @@ class AdminCreateController extends Controller
             $this->dispatch(
                 new InitOneBlockCommand($block_name)
             );
+
+            $this->dispatch(new InitOneBlockCropCommand($block_name));
 
         } catch(\Exception $exception) {
 
@@ -154,6 +166,8 @@ class AdminCreateController extends Controller
                 new ReinitOneBlockCommand($block_name)
             );
 
+            $this->dispatch(new InitOneBlockCropCommand($block_name));
+
         } catch(\Exception $exception) {
 
             return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
@@ -169,6 +183,8 @@ class AdminCreateController extends Controller
             $this->dispatch(
                 new ReinitGroupCommand($block_name, $group_name)
             );
+
+            $this->dispatch(new InitGroupCropCommand($block_name, $group_name));
 
         } catch(\Exception $exception) {
 

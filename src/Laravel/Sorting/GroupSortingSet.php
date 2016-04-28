@@ -3,7 +3,7 @@
 namespace Interpro\QuickStorage\Laravel\Sorting;
 
 use Interpro\QuickStorage\Concept\Exception\BuildQueryException;
-use Interpro\QuickStorage\Concept\Sorting\GroupSorting;
+use Interpro\QuickStorage\Concept\Sorting\GroupSorting as GroupSortingInterface;
 use Interpro\QuickStorage\Concept\Sorting\GroupSortingSet as GroupSortingSetInterface;
 use Interpro\QuickStorage\Laravel\GroupSet;
 
@@ -41,11 +41,11 @@ class GroupSortingSet implements GroupSortingSetInterface
     /**
      * @param string $group_name
      *
-     * @param GroupSorting $sorting
+     * @param GroupSortingInterface $sorting
      *
      * @return void
      */
-    public function add($group_name, GroupSorting $sorting)
+    public function add($group_name, GroupSortingInterface $sorting)
     {
         $field_name = $sorting->getFieldName();
 

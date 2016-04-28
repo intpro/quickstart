@@ -1,7 +1,6 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle\Image;
 
 use Interpro\ImageFileLogic\Laravel\Action\ExistImageAction;
-use Interpro\QuickStorage\Concept\Exception\CommandDsNotWorkException;
 use Interpro\QuickStorage\Concept\Command\Image\RefreshAllGroupImageCommand;
 use Interpro\QuickStorage\Laravel\Item\ImageItem;
 

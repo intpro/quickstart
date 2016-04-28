@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 
 use Interpro\ImageFileLogic\Concept\Exception\ImageFileSystemException;
 use Interpro\ImageFileLogic\Concept\Report;
+use Interpro\QuickStorage\Concept\Command\Image\ClearOneGroupImageCommand;
 use Interpro\QuickStorage\Concept\Command\Image\RefreshAllGroupImageCommand;
 use Interpro\QuickStorage\Concept\Command\Image\RefreshBlockImageCommand;
 use Interpro\QuickStorage\Concept\Command\Image\RefreshOneGroupImageCommand;
@@ -184,8 +185,49 @@ class ImageFileController extends Controller
         return $resp_arr;
     }
 
+    public function clearGroupImage(Request $request, Report $report){
 
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'block_name' => 'required',
+                'group_name' => 'required',
+                'group_id' => 'required',
+                'image_name' => 'required'
+            ]
+        );
 
+        if($validator->fails()){
+            return ['status'=>'error', 'error'=>$validator->errors()->setFormat(':message<br>')->all()];
+        }
+
+        try{
+            $block_name = $request->input('block_name');
+            $group_name = $request->input('group_name');
+            $group_id = $request->input('group_id');
+            $image_name = $request->input('image_name');
+
+            $this->dispatch(
+                new ClearOneGroupImageCommand(
+                    $block_name,
+                    $group_name,
+                    $image_name,
+                    $group_id));
+
+        }catch(ImageFileSystemException $imFlexc){
+
+            return ['status'=>'error', 'error'=>$imFlexc->getMessage()];
+        }
+
+        $resp_name = $group_name.'_'.$image_name.'_'.$group_id;
+
+        $resp_arr = [];
+        $resp_arr['status'] = 'OK';
+        $resp_arr['prefix'] = $resp_name;
+        $resp_arr['sizes']  = $report->getImageReport($resp_name);
+
+        return $resp_arr;
+    }
 
 
     public function updateGroupImageMass(Request $request, Report $report){

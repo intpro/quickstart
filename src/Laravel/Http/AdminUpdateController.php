@@ -2,6 +2,8 @@
 
 namespace Interpro\QuickStorage\Laravel\Http;
 
+use Interpro\QuickStorage\Concept\Command\Crop\UpdateBlockCropCommand;
+use Interpro\QuickStorage\Concept\Command\Crop\UpdateOneGroupCropCommand;
 use Interpro\QuickStorage\Concept\Command\UpdateBlockCommand;
 use Interpro\QuickStorage\Concept\Command\UpdateGroupItemCommand;
 use Illuminate\Support\Facades\Request;
@@ -20,6 +22,9 @@ class AdminUpdateController extends Controller
                 try {
 
                     $this->dispatch(new UpdateBlockCommand($dataobj['block'], $dataobj));
+
+                    $crops = array_key_exists('crops', $dataobj) ? $dataobj['crops'] : [];
+                    $this->dispatch(new UpdateBlockCropCommand($dataobj['block'], $crops));
 
                     return ['status' => 'OK'];
 
@@ -47,6 +52,9 @@ class AdminUpdateController extends Controller
                 try {
 
                     $this->dispatch(new UpdateGroupItemCommand($dataobj['group_id'], $dataobj));
+
+                    $crops = array_key_exists('crops', $dataobj) ? $dataobj['crops'] : [];
+                    $this->dispatch(new UpdateOneGroupCropCommand($dataobj['block'], $dataobj['group'], $dataobj['group_id'], $crops));
 
                     return ['status' => 'OK'];
 

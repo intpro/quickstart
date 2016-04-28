@@ -305,7 +305,7 @@ class QSource implements QSourceInterface
      *
      * @return array
      */
-    public function oneImageQueryForGroup($block_name, $group_name, $group_id, $image_name)
+    public function oneImageQueryForGroup($block_name, $group_name, $group_id, $image_name='')
     {
         $model_image = $this->app->make('Interpro\QuickStorage\Laravel\Model\Imageitem');
 
@@ -313,7 +313,7 @@ class QSource implements QSourceInterface
 
         $image_q->where('block_name', '=', $block_name);
         $image_q->where('group_name', '=', $group_name);
-        $image_q->where('name', '=', $image_name);
+        if($image_name){$image_q->where('name', '=', $image_name);}
         $image_q->where('group_id', '=', $group_id);
 
         $collection = $image_q->get();
@@ -363,6 +363,158 @@ class QSource implements QSourceInterface
         $image_q->where('group_name', '=', $group_name);
 
         return $image_q->get()->toArray();
+    }
+
+
+
+
+    //Запросы для кропов картинок
+    /**
+     * @param string $block_name
+     * @param string $image_name
+     *
+     * @return array
+     */
+    public function cropQueryForBlock($block_name, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+
+        return $crop_q->get()->toArray();
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     * @param string $image_name
+     *
+     * @return array
+     */
+    public function cropQueryForGroup($block_name, $group_name, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        $crop_q->where('group_name', '=', $group_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+
+        return $crop_q->get()->toArray();
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $image_name
+     * @param string $crop_name
+     *
+     * @return array
+     */
+    public function cropQueryForBlockForCrop($block_name, $crop_name, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+        $crop_q->where('name', '=', $crop_name);
+
+        $collection = $crop_q->get();
+
+        if(!$collection->isEmpty())
+        {
+            $_obj = $collection->first();
+
+            return $_obj->toArray();
+
+        }else{
+
+            throw new BuildQueryException('Данные кропа '.$crop_name.' блока '.$block_name.' картинки '.$image_name.' не найдены в базе.');
+        }
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     * @param string $image_name
+     *
+     * @return array
+     */
+    public function cropQueryForGroupForCrop($block_name, $group_name, $crop_name, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        $crop_q->where('group_name', '=', $group_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+        $crop_q->where('name', '=', $crop_name);
+
+        return $crop_q->get()->toArray();
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     * @param int $group_id
+     * @param string $image_name
+     * @param string $crop_name
+     *
+     * @return array
+     */
+    public function oneCropQueryForGroup($block_name, $group_name, $group_id, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        $crop_q->where('group_name', '=', $group_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+        $crop_q->where('group_id',   '=', $group_id);
+
+        return $crop_q->get()->toArray();
+    }
+
+    /**
+     * @param string $block_name
+     * @param string $group_name
+     * @param int $group_id
+     * @param string $image_name
+     * @param string $crop_name
+     *
+     * @return array
+     */
+    public function oneCropQueryForGroupForCrop($block_name, $group_name, $group_id, $crop_name, $image_name='')
+    {
+        $model_crop = $this->app->make('Interpro\QuickStorage\Laravel\Model\Cropitem');
+
+        $crop_q = $model_crop->query();
+
+        $crop_q->where('block_name', '=', $block_name);
+        $crop_q->where('group_name', '=', $group_name);
+        if($image_name){$crop_q->where('image_name', '=', $image_name);}
+        $crop_q->where('name',       '=', $crop_name);
+        $crop_q->where('group_id',   '=', $group_id);
+
+        $collection = $crop_q->get();
+
+        if(!$collection->isEmpty())
+        {
+            $_obj = $collection->first();
+
+            return $_obj->toArray();
+
+        }else{
+
+            throw new BuildQueryException('Данные кропа '.$crop_name.' блока '.$block_name.' группы '.$group_name.' картинки '.$image_name.' не найдены в базе.');
+        }
     }
 
 }

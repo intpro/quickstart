@@ -1,9 +1,7 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle;
 
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
-use Interpro\Placeholder\Concept\PlaceholderAgent;
 use Interpro\QuickStorage\Concept\Command\CreateGroupItemCommand;
 use Interpro\QuickStorage\Concept\StorageStructure;
 use Interpro\QuickStorage\Laravel\Model\Block;
