@@ -232,6 +232,7 @@ class Block extends Model
                 ];
             }
         }
+
         $newGroupItem->save();
 
         $dataArr['groups'] = array_fill_keys($groupstruct_invert[$group_name], []);
