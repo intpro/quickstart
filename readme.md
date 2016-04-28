@@ -20,19 +20,25 @@
     composer require interpro/imagefilelogic 1.0.x-dev
 
 ---
-4\. Установка пакета для приема информации с модальных окон
+4\. Установка пакета для плэйсхолдеров изображений
+
+
+    composer require interpro/placeholder 1.0.x-dev
+
+---
+5\. Установка пакета для приема информации с модальных окон
 
 
     composer require interpro/fidback 1.0.x-dev
 
 ---
-5\. Установка пакета генератора админ панели
+6\. Установка пакета генератора админ панели
 
 
     composer require interpro/admingenerator 1.0.x-dev
 
 ---
-6\. ServicProvider
+7\. ServicProvider
 
 Необходимо в файле app.php (/config/app.php) в providers прописывать следующий провайдеры
 
@@ -47,7 +53,7 @@
     php artisan vendor:publish
 ```
 ---
-7\. Config файлы проекта
+8\. Config файлы проекта
     
 - [Правила разметки конфига qstorage](https://github.com/KocaHocTpa/quickstart/blob/master/config.md)
 - [Правила разметки конфига resize](http://example.com)

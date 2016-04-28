@@ -30,6 +30,14 @@ return [
                 'images'       => ['logo'],
             ]
         ]
+    ],
+
+    'dom_all_images' => [
+        'groups' => [
+            'images_set' => [
+                'images'    => ['text_pict']
+            ]
+        ]
     ]
 
 ];
