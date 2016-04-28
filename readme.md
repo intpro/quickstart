@@ -47,13 +47,17 @@
     'Interpro\Fidback\FidbackServiceProvider',
     'Intervention\Image\ImageServiceProvider',
     'Interpro\AdminGenerator\AdminGeneratorServiceProvider'
-    
-Затем из консоли выполнить следующую команду 
+
+---
+8\. Создать внутри public папки следующие папки: images, внутри images папки - placeholders, features, crops
+
+---
+9\. Затем из консоли выполнить следующую команду
 ```
     php artisan vendor:publish
 ```
 ---
-8\. Config файлы проекта
+10\. Config файлы проекта
     
 - [Правила разметки конфига qstorage](https://github.com/KocaHocTpa/quickstart/blob/master/config.md)
 - [Правила разметки конфига resize](http://example.com)
