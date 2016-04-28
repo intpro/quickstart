@@ -7,16 +7,6 @@ use Interpro\QuickStorage\Concept\Command\Command;
 class InitAllBlockCommandHandler extends InitOneBlockCommandHandler{
 
     /**
-     * Create the command handler.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Handle the command.
      *
      * @param  Command  $command
