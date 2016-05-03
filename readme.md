@@ -45,6 +45,7 @@
     'Interpro\QuickStorage\QuickStorageServiceProvider',
     'Interpro\ImageFileLogic\ImageFileLogicServiceProvider',
     'Interpro\Fidback\FidbackServiceProvider',
+    'Interpro\Placeholder\PlaceholderServiceProvider',
     'Intervention\Image\ImageServiceProvider',
     'Interpro\AdminGenerator\AdminGeneratorServiceProvider'
 

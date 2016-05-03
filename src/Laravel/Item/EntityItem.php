@@ -11,7 +11,19 @@ abstract class EntityItem
     private $storageStruct;
     private $repository;
     protected $imageRepository;
+    protected $fieldsProvider;
     private $group_collections;
+
+    public function __construct($fields)
+    {
+        $this->storageStruct   = App::make('Interpro\QuickStorage\Concept\StorageStructure');
+        $this->repository      = App::make('Interpro\QuickStorage\Concept\Repository');
+        $this->imageRepository = App::make('Interpro\QuickStorage\Concept\ImageRepository');
+        $this->fieldsProvider  = App::make('Interpro\QuickStorage\Concept\FieldProviding\FieldExtMediator');
+
+        $this->fields = $fields;
+        $this->group_collections = [];
+    }
 
     abstract public function getImageFields($image_name);
 
@@ -40,16 +52,6 @@ abstract class EntityItem
         $imageItem = new ImageItem($config_name.'_'.$id, $fields);
 
         return $imageItem;
-    }
-
-    public function __construct($fields)
-    {
-        $this->storageStruct   = App::make('Interpro\QuickStorage\Concept\StorageStructure');
-        $this->repository      = App::make('Interpro\QuickStorage\Concept\Repository');
-        $this->imageRepository = App::make('Interpro\QuickStorage\Concept\ImageRepository');
-
-        $this->fields = $fields;
-        $this->group_collections = [];
     }
 
     protected function createGroupIfNotExist($block_name, $group_name, & $group_array, $owner_id)

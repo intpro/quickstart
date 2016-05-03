@@ -3,6 +3,8 @@
 
 use Illuminate\Support\Facades\Log;
 use Interpro\QuickStorage\Concept\Command\UpdateBlockCommand;
+use Interpro\QuickStorage\Concept\FieldProviding\FieldExtMediator;
+use Interpro\QuickStorage\Concept\FieldProviding\FieldSaveMediator;
 use Interpro\QuickStorage\Laravel\Model\Block;
 use Interpro\QuickStorage\Laravel\Model\Bool;
 use Interpro\QuickStorage\Laravel\Model\Imageitem;
@@ -13,14 +15,16 @@ use Interpro\QuickStorage\Laravel\Model\Textfield;
 
 class UpdateBlockCommandHandler {
 
+    private $saveMediator;
+
     /**
      * Create the command handler.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(FieldSaveMediator $saveMediator)
     {
-        //
+        $this->saveMediator = $saveMediator;
     }
 
     /**
@@ -123,6 +127,16 @@ class UpdateBlockCommandHandler {
                 }
 
                 $block->save();
+
+
+                //Сохраняем все внешние (отностиельно quickstorage поля)
+                foreach($this->saveMediator->list as $suffix) {
+                    if(array_key_exists($suffix, $dataobj)){
+                        $dataobj['entity_name'] = $block_name;
+                        $this->saveMediator->save($suffix, $dataobj[$suffix]);
+                    }
+                }
+
 
             }else{
                 throw new \Exception('Не нашел блок по имени '.$block_name);

@@ -142,6 +142,16 @@ class UpdateGroupItemCommandHandler {
 
                 $group_item->save();
 
+
+                //Сохраняем все внешние (отностиельно quickstorage поля)
+                foreach($this->saveMediator->list as $suffix) {
+                    if(array_key_exists($suffix, $dataobj)){
+                        $dataobj['entity_name'] = $group_name;
+                        $dataobj['entity_id'] = $group_id;
+                        $this->saveMediator->save($suffix, $dataobj[$suffix]);
+                    }
+                }
+
             }else{
                 throw new \Exception('Не нашел элемент группы по id по имени в БД '.$group_id);
             }

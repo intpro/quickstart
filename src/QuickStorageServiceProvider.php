@@ -66,6 +66,16 @@ class QuickStorageServiceProvider extends ServiceProvider {
         );
 
         $this->app->singleton(
+            'Interpro\QuickStorage\Concept\FieldProviding\FieldExtMediator',
+            'Interpro\QuickStorage\Laravel\FieldProviding\FieldExtMediator'
+        );
+
+        $this->app->singleton(
+            'Interpro\QuickStorage\Concept\FieldProviding\FieldSaveMediator',
+            'Interpro\QuickStorage\Laravel\FieldProviding\FieldSaveMediator'
+        );
+
+        $this->app->singleton(
             'Interpro\QuickStorage\Concept\Repository',
             'Interpro\QuickStorage\Laravel\Repository'
         );

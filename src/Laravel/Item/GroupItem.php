@@ -27,8 +27,17 @@ class GroupItem extends EntityItem implements GroupItemInterface
     //Перехватываем магическими методами обращения к полям и возвращаем значения из связанных таблиц (по типам)
     public function __get($req_name)
     {
+        $suffix_pos = strripos($req_name, '_');
 
-        if (substr($req_name, -5) == 'field'){
+        if($suffix_pos === false)
+        {
+            throw new WrongGroupFieldNameException('Обращение к полю (подгруппе, картинке) группы ->'.$req_name.' '.$this->getField('group_name').' не соответствует формату ggg->xxx_field.');
+        }
+
+        $suffix = substr($req_name, $suffix_pos+1);
+        $field_name = substr($req_name, 0, $suffix_pos);
+
+        if ($suffix == 'field'){
 
             $field_name = substr($req_name, 0, -6); //+прочерк между именем и field
 
@@ -43,41 +52,42 @@ class GroupItem extends EntityItem implements GroupItemInterface
                 throw new WrongGroupFieldNameException('Поле '.$field_name.' группы '.$this->getField('group_name').' не найдено в настройке.');
             }
 
-        }elseif (substr($req_name, -5) == 'image'){
-
-            $image_name = substr($req_name, 0, -6); //+прочерк между именем и image
+        }elseif ($suffix == 'image'){
 
             if($this->groupFieldExist(
                 $this->getField('block_name'),
                 $this->getField('group_name'),
-                $image_name
+                $field_name
             ))
             {
-                $value = $this->getImage($image_name);
+                $value = $this->getImage($field_name);
             }else{
-                throw new WrongGroupFieldNameException('Картинка '.$image_name.' группы '.$this->getField('group_name').' не найдена в настройке.');
+                throw new WrongGroupFieldNameException('Картинка '.$field_name.' группы '.$this->getField('group_name').' не найдена в настройке.');
             }
 
-        }elseif (substr($req_name, -5) == 'group'){
-
-            $group_name = substr($req_name, 0, -6); //+прочерк между именем и field
+        }elseif ($suffix == 'group'){
 
             if($this->subGroupExist(
                $this->getField('block_name'),
                $this->getField('group_name'),
-               $group_name
+                $field_name
             ))
             {
                 $value = $this->getGroupCollection(
                     $this->getField('block_name'),
-                    $group_name,
+                    $field_name,
                     $this->getField('id')
                 );
             }else{
-                throw new WrongGroupNameException('Группа '.$group_name.' в составе группы '.$this->getField('group_name').' не найдена.');
+                throw new WrongGroupNameException('Группа '.$field_name.' в составе группы '.$this->getField('group_name').' не найдена.');
             }
 
+        }elseif ($this->fieldsProvider->suffixRegistered($suffix)){
+
+            $value = $this->fieldsProvider->getField($suffix, $this->getField('group_name'), $field_name, $this->getField('id'));
+
         }else{
+
             throw new WrongGroupFieldNameException('Обращение к полю (подгруппе, картинке) группы ->'.$req_name.' '.$this->getField('group_name').' не соответствует формату ggg->xxx_field.');
         }
 
