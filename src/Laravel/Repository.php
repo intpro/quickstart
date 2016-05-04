@@ -108,24 +108,25 @@ class Repository implements RepositoryInterface
 
     private function checkGroupExistence($block_name, $group_name)
     {
-        if(!array_key_exists($group_name, $this->groups_blended))
-        {
-            //Извлекаем из хранилища элементы целевой группы с полями
-            $group_array = $this->qSource->groupQuery($block_name, $group_name);
-            $this->groups_blended[$group_name] = $group_array;
-        }
+//Схема не работает, когда 2 запроса подряд с разными параметрами
+//        if(!array_key_exists($group_name, $this->groups_blended))
+//        {
+        //Извлекаем из хранилища элементы целевой группы с полями
+        $group_array = $this->qSource->groupQuery($block_name, $group_name);
+        $this->groups_blended[$group_name] = $group_array;
+//        }
     }
 
     private function checkGroupOwnedExistence($block_name, $group_name, $owner_id=0)
     {
         $this->checkGroupExistence($block_name, $group_name);
+//Схема не работает, когда 2 запроса подряд с разными параметрами
+//        if(!array_key_exists($group_name, $this->groups_ordered))
+//        {
+        $this->groups_ordered[$group_name]=[];
 
-        if(!array_key_exists($group_name, $this->groups_ordered))
-        {
-            $this->groups_ordered[$group_name]=[];
-
-            $this->orderGroup($group_name);
-        }
+        $this->orderGroup($group_name);
+//        }
 
         $ordered = & $this->groups_ordered[$group_name];
 

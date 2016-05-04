@@ -98,23 +98,3 @@ class PaginalQueryAgent implements PaginalQueryAgentInterface{
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
