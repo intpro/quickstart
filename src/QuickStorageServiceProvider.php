@@ -49,7 +49,10 @@ class QuickStorageServiceProvider extends ServiceProvider {
             'Interpro\QuickStorage\Concept\Command\Crop\RefreshBlockCropCommand'     => 'Interpro\QuickStorage\Laravel\Handle\Crop\RefreshBlockCropCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\Crop\RefreshOneGroupCropCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Crop\RefreshOneGroupCropCommandHandler@handle',
             'Interpro\QuickStorage\Concept\Command\Crop\UpdateBlockCropCommand'      => 'Interpro\QuickStorage\Laravel\Handle\Crop\UpdateBlockCropCommandHandler@handle',
-            'Interpro\QuickStorage\Concept\Command\Crop\UpdateOneGroupCropCommand'   => 'Interpro\QuickStorage\Laravel\Handle\Crop\UpdateOneGroupCropCommandHandler@handle'
+            'Interpro\QuickStorage\Concept\Command\Crop\UpdateOneGroupCropCommand'   => 'Interpro\QuickStorage\Laravel\Handle\Crop\UpdateOneGroupCropCommandHandler@handle',
+
+            'Interpro\QuickStorage\Concept\Command\Flat\UpdateBlockFlatCommand'      => 'Interpro\QuickStorage\Laravel\Handle\Flat\UpdateBlockFlatCommandHandler@handle',
+            'Interpro\QuickStorage\Concept\Command\Flat\UpdateGroupItemFlatCommand'  => 'Interpro\QuickStorage\Laravel\Handle\Flat\UpdateGroupItemFlatCommandHandler@handle'
         ]);
     }
 
@@ -118,6 +121,11 @@ class QuickStorageServiceProvider extends ServiceProvider {
         $this->app->singleton(
             'Interpro\QuickStorage\Concept\PaginalQueryAgent',
             'Interpro\QuickStorage\Laravel\PaginalQueryAgent'
+        );
+
+        $this->app->singleton(
+            'Interpro\QuickStorage\Concept\JSONQueryAgent',
+            'Interpro\QuickStorage\Laravel\JSONQueryAgent'
         );
 
         // Let Laravel Ioc Container know about our Controller

@@ -5,6 +5,7 @@ namespace Interpro\QuickStorage\Laravel;
 use Interpro\QuickStorage\Concept\PaginalQueryAgent as PaginalQueryAgentInterface;
 use Interpro\QuickStorage\Concept\QueryAgent as QueryAgentInterface;
 
+
 class PaginalQueryAgent implements PaginalQueryAgentInterface{
 
     private $queryAgent;
