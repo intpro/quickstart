@@ -316,18 +316,7 @@ class QSource implements QSourceInterface
         if($image_name){$image_q->where('name', '=', $image_name);}
         $image_q->where('group_id', '=', $group_id);
 
-        $collection = $image_q->get();
-
-        if(!$collection->isEmpty())
-        {
-            $block_obj = $collection->first();
-
-            return $block_obj->toArray();
-
-        }else{
-
-            throw new BuildQueryException('Данные картинки '.$image_name.' блока '.$block_name.' элемента группы '.$group_name.'-'.$group_id.' не найдены в базе.');
-        }
+        return $image_q->get()->toArray();
     }
 
     /**

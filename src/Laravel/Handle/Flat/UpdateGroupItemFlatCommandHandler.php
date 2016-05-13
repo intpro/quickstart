@@ -1,7 +1,7 @@
-<?php namespace Interpro\QuickStorage\Laravel\Flat\Handle;
+<?php namespace Interpro\QuickStorage\Laravel\Handle\Flat;
 
 use Illuminate\Support\Facades\Log;
-use Interpro\QuickStorage\Concept\Command\UpdateGroupItemFlatCommand;
+use Interpro\QuickStorage\Concept\Command\Flat\UpdateGroupItemFlatCommand;
 use Interpro\QuickStorage\Concept\FieldProviding\FieldSaveMediator;
 use Interpro\QuickStorage\Laravel\Model\Bool;
 use Interpro\QuickStorage\Laravel\Model\Group;

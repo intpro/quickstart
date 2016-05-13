@@ -1,4 +1,6 @@
-<?php namespace Interpro\QuickStorage\Concept\Command;
+<?php namespace Interpro\QuickStorage\Concept\Command\Flat;
+
+use Interpro\QuickStorage\Concept\Command\Command;
 
 class UpdateGroupItemFlatCommand extends Command {
 

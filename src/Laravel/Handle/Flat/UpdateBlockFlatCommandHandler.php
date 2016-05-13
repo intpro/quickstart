@@ -1,7 +1,7 @@
-<?php namespace Interpro\QuickStorage\Laravel\Flat\Handle;
+<?php namespace Interpro\QuickStorage\Laravel\Handle\Flat;
 
 use Illuminate\Support\Facades\Log;
-use Interpro\QuickStorage\Concept\Command\UpdateBlockCommand;
+use Interpro\QuickStorage\Concept\Command\Flat\UpdateBlockFlatCommand;
 use Interpro\QuickStorage\Concept\FieldProviding\FieldSaveMediator;
 use Interpro\QuickStorage\Laravel\Model\Block;
 use Interpro\QuickStorage\Laravel\Model\Bool;
@@ -28,10 +28,10 @@ class UpdateBlockFlatCommandHandler {
     /**
      * Handle the command.
      *
-     * @param  UpdateBlockCommand  $command
+     * @param  UpdateBlockFlatCommand  $command
      * @return void
      */
-    public function handle(UpdateBlockCommand $command)
+    public function handle(UpdateBlockFlatCommand $command)
     {
         $qstorage = config('qstorage');
 
