@@ -11,7 +11,6 @@ class InitOneGroupCropCommandHandler extends CropCommandHandler
     public function handle(InitOneGroupCropCommand $command)
     {
         $this->initDBForGroupItem($command->block_name, $command->group_name, $command->group_id);
-        $this->refreshGroupItem($command->block_name, $command->group_name, $command->group_id);
     }
 
 }

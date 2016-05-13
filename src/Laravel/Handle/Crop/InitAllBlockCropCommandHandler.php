@@ -15,7 +15,6 @@ class InitAllBlockCropCommandHandler extends CropCommandHandler
         foreach($qstorage as $blockname => $blockstruct)
         {
             $this->initDBForBlock($blockname);
-            $this->refreshBlock($blockname);
         }
     }
 

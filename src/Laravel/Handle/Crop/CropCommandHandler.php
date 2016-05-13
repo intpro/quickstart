@@ -3,6 +3,7 @@
 use Interpro\ImageFileLogic\Concept\CropConfig;
 use Interpro\ImageFileLogic\Concept\Croper;
 use Interpro\ImageFileLogic\Concept\ImageConfig;
+use Interpro\Placeholder\Concept\PlaceholderAgent;
 use Interpro\QuickStorage\Concept\Exception\CropNotFoundException;
 use Interpro\QuickStorage\Concept\QSource;
 use Interpro\QuickStorage\Laravel\Model\Cropitem;
@@ -13,6 +14,7 @@ abstract class CropCommandHandler
     protected $crop_config;
     protected $image_config;
     protected $croper;
+    protected $phAgent;
 
     /**
      * Interpro\ImageFileLogic\Concept\QSource $qSource
@@ -22,12 +24,13 @@ abstract class CropCommandHandler
      *
      * @return void
      */
-    public function __construct(QSource $qSource, Croper $croper, CropConfig $crop_config, ImageConfig $image_config)
+    public function __construct(QSource $qSource, Croper $croper, CropConfig $crop_config, ImageConfig $image_config, PlaceholderAgent $phAgent)
     {
-        $this->qSource = $qSource;
-        $this->croper = $croper;
-        $this->crop_config = $crop_config;
+        $this->qSource      = $qSource;
+        $this->croper       = $croper;
+        $this->crop_config  = $crop_config;
         $this->image_config = $image_config;
+        $this->phAgent      = $phAgent;
     }
 
     public function refreshBlock($block_name)
@@ -136,7 +139,7 @@ abstract class CropCommandHandler
 
                         $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
 
-                        $crop->link         = $image_key.'_0.jpg';
+                        $crop->link         = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
                         $crop->man_sufix    = $params['man'];
                         $crop->target_sufix = $params['target'];
                         $crop->cache_index  = 0;
@@ -196,7 +199,7 @@ abstract class CropCommandHandler
 
                         $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
 
-                        $crop->link         = $image_key.'_'.$group_id.'_'.$crop_name.'.jpg';
+                        $crop->link         = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
                         $crop->man_sufix    = $params['man'];
                         $crop->target_sufix = $params['target'];
                         $crop->cache_index  = 0;
@@ -220,53 +223,56 @@ abstract class CropCommandHandler
     {
         $config = $this->crop_config->getConfigAll();
 
-        $image_fields = $this->qSource->oneImageQueryForGroup($block_name, $group_name, $group_id);
+        $images_collection = $this->qSource->oneImageQueryForGroup($block_name, $group_name, $group_id);
 
-        $image_name = $image_fields['name'];
-        $image_id   = $image_fields['id'];
-
-        $image_key  = $group_name.'_'.$image_name;
-
-        if(array_key_exists($image_key, $config))
+        foreach($images_collection as $image_fields)
         {
-            $crops = &$config[$image_key];
+            $image_name = $image_fields['name'];
+            $image_id   = $image_fields['id'];
 
-            foreach($crops as $crop_name => $params)
+            $image_key  = $group_name.'_'.$image_name;
+
+            if(array_key_exists($image_key, $config))
             {
-                $crop = Cropitem::where('block_name', $block_name)->
-                    where('group_name', $group_name)->
-                    where('group_id', $group_id)->
-                    where('name', $crop_name)->
-                    where('image_name', $image_name)->
-                    where('image_id', $image_id);
+                $crops = &$config[$image_key];
 
-                if(!$crop)
+                foreach($crops as $crop_name => $params)
                 {
-                    $man_width = $this->image_config->getWidth($image_key, $params['man']);
-                    $man_height = $this->image_config->getHeight($image_key, $params['man']);
+                    $crop = Cropitem::where('block_name', $block_name)->
+                        where('group_name', $group_name)->
+                        where('group_id', $group_id)->
+                        where('name', $crop_name)->
+                        where('image_name', $image_name)->
+                        where('image_id', $image_id)->first();
 
-                    $target_width = $this->image_config->getWidth($image_key, $params['target']);
-                    $target_height = $this->image_config->getHeight($image_key, $params['target']);
+                    if(!$crop)
+                    {
+                        $man_width = $this->image_config->getWidth($image_key, $params['man']);
+                        $man_height = $this->image_config->getHeight($image_key, $params['man']);
 
-                    $result_width = floor($target_width*($params['width']/$man_width));
-                    $result_height = floor($target_height*($params['height']/$man_height));
+                        $target_width = $this->image_config->getWidth($image_key, $params['target']);
+                        $target_height = $this->image_config->getHeight($image_key, $params['target']);
 
-                    $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
+                        $result_width = floor($target_width*($params['width']/$man_width));
+                        $result_height = floor($target_height*($params['height']/$man_height));
 
-                    $crop->link         = $image_key.'_'.$group_id.'_'.$crop_name.'.jpg';
-                    $crop->man_sufix    = $params['man'];
-                    $crop->target_sufix = $params['target'];
-                    $crop->cache_index  = 0;
-                    $crop->man_x1       = 0;
-                    $crop->man_y1       = 0;
-                    $crop->man_x2       = $params['width'];
-                    $crop->man_y2       = $params['height'];
-                    $crop->target_x1    = 0;
-                    $crop->target_y1    = 0;
-                    $crop->target_x2    = $result_width;
-                    $crop->target_y2    = $result_height;
+                        $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
 
-                    $crop->save();
+                        $crop->link         = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
+                        $crop->man_sufix    = $params['man'];
+                        $crop->target_sufix = $params['target'];
+                        $crop->cache_index  = 0;
+                        $crop->man_x1       = 0;
+                        $crop->man_y1       = 0;
+                        $crop->man_x2       = $params['width'];
+                        $crop->man_y2       = $params['height'];
+                        $crop->target_x1    = 0;
+                        $crop->target_y1    = 0;
+                        $crop->target_x2    = $result_width;
+                        $crop->target_y2    = $result_height;
+
+                        $crop->save();
+                    }
                 }
             }
         }

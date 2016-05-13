@@ -11,7 +11,6 @@ class InitOneBlockCropCommandHandler extends CropCommandHandler
     public function handle(InitOneBlockCropCommand $command)
     {
         $this->initDBForBlock($command->block_name);
-        $this->refreshBlock($command->block_name);
     }
 
 }
