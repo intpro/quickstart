@@ -383,12 +383,12 @@ abstract class CropCommandHandler
             {
                 $crops = &$crops_config[$image_key];
 
-                foreach($crops as $crop_name => $params)
+                foreach($crops as $crop_name => $params_1)
                 {
-                    $man_x1 = $params['x1'];
-                    $man_x2 = $params['x2'];
-                    $man_y1 = $params['y1'];
-                    $man_y2 = $params['y2'];
+                    $man_x1 = $params_1['x1'];
+                    $man_x2 = $params_1['x2'];
+                    $man_y1 = $params_1['y1'];
+                    $man_y2 = $params_1['y2'];
 
                     $man_name = $this->crop_config->getMan($image_key, $crop_name);
                     $target_name = $this->crop_config->getTarget($image_key, $crop_name);
