@@ -21,7 +21,7 @@ class CropRepository implements CropRepositoryInterface
         if($group_id) //Если кроп принадлежит элементу группы
         {
             $crop_key = $group_name.'_'.$image_name.'_'.$crop_name;
-            $crop_key_id = $crop_key.'_'.$group_id;
+            $crop_key_id = $group_name.'_'.$image_name.'_'.$group_id.'_'.$crop_name;
 
             $crop = null;
 
@@ -31,7 +31,7 @@ class CropRepository implements CropRepositoryInterface
             }else{
                 $id_finded = false;
 
-                $crops_array = $this->qSource->cropQueryForGroupForCrop($block_name, $group_name, $image_name, $crop_name);
+                $crops_array = $this->qSource->cropQueryForGroupForCrop($block_name, $group_name, $crop_name, $image_name);
 
                 foreach($crops_array as $crop_fields)
                 {
@@ -63,7 +63,7 @@ class CropRepository implements CropRepositoryInterface
                 $crop = $this->crops[$crop_key];
             }else{
 
-                $crop_fields = $this->qSource->cropQueryForBlockForCrop($block_name, $image_name, $crop_name);
+                $crop_fields = $this->qSource->cropQueryForBlockForCrop($block_name, $crop_name, $image_name);
 
                 $crop = new CropItem($crop_key, $crop_fields);
 
