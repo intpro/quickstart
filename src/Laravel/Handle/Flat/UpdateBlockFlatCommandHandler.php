@@ -37,7 +37,7 @@ class UpdateBlockFlatCommandHandler {
 
         $data_arr = &$command->data_arr;
 
-        $block_name = $data_arr['block_name'];
+        $block_name = $data_arr['name'];
 
         $block = Block::find($block_name);
 
