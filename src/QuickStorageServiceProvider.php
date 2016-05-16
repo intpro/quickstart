@@ -132,8 +132,8 @@ class QuickStorageServiceProvider extends ServiceProvider {
         $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminCreateController');
         $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminUpdateController');
         $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminDeleteController');
-
         $this->app->make('Interpro\QuickStorage\Laravel\Http\ImageFileController');
+        $this->app->make('Interpro\QuickStorage\Laravel\Http\AdminCropImageController');
 
         include __DIR__ . '/Laravel/Http/routes.php';
     }

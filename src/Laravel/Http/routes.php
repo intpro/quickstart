@@ -29,4 +29,5 @@ Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function()
     Route::post('/update_group_image_mass',         ['as' => 'u_g_img_m', 'uses' => 'Interpro\QuickStorage\Laravel\Http\ImageFileController@updateGroupImageMass']);
     Route::post('/refresh_group_image_mass',        ['as' => 'r_g_img_m', 'uses' => 'Interpro\QuickStorage\Laravel\Http\ImageFileController@refreshGroupImageMass']);
 
+    Route::post('/crop_group_image',                ['as' => 'cr_g_img', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCropImageController@cropGroupImage']);
 });
