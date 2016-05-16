@@ -15,6 +15,7 @@ abstract class CropCommandHandler
     protected $image_config;
     protected $croper;
     protected $phAgent;
+    protected $path_prefix;
 
     /**
      * Interpro\ImageFileLogic\Concept\QSource $qSource
@@ -31,6 +32,14 @@ abstract class CropCommandHandler
         $this->crop_config  = $crop_config;
         $this->image_config = $image_config;
         $this->phAgent      = $phAgent;
+
+        $config_path_prefix = config('imagefilelogic.crop_path_prefix');
+
+        if($config_path_prefix){
+            $this->path_prefix = $config_path_prefix;
+        }else{
+            $this->path_prefix = 'crops/';
+        }
     }
 
     public function refreshBlock($block_name)
@@ -423,7 +432,7 @@ abstract class CropCommandHandler
                         'image_id' => $image_id,
                         'man_sufix' => $man_name,
                         'target_sufix' => $target_name,
-                        'link' => $image_key.'_'.$group_id.'_'.$crop_name.'.jpg'
+                        'link' => $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.jpg'
                     ]);
 
 //                    if(!$crop)
