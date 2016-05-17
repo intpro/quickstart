@@ -1,5 +1,6 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle\Crop;
 
+use Illuminate\Support\Facades\Log;
 use Interpro\ImageFileLogic\Concept\CropConfig;
 use Interpro\ImageFileLogic\Concept\Croper;
 use Interpro\ImageFileLogic\Concept\Exception\ImageFileSystemException;
@@ -392,18 +393,19 @@ abstract class CropCommandHandler
 
                 if(!$man_exist)
                 {
-                    throw new ImageFileSystemException('Нет файла по пути (с любым расширением) :'.$man_path);
+                    Log::info('Нет файла по пути (с любым расширением) :'.$man_path);
+
+                    $man_width = $this->image_config->getWidth($image_key, $man_name);
+                    $man_height = $this->image_config->getHeight($image_key, $man_name);
+                }else{
+                    $man_path = $man_path.'.'.$path_ext;
+
+                    $img_man = Image::make($man_path);
+                    $man_width = $img_man->width();
+                    $man_height = $img_man->height();
                 }
 
-                $man_path = $man_path.'.'.$path_ext;
-
-                $img_man = Image::make($man_path);
-                $man_width = $img_man->width();
-                $man_height = $img_man->height();
                 //--------------------------------------------------------------------------------
-
-//                $man_width = $this->image_config->getWidth($image_key, $man_name);
-//                $man_height = $this->image_config->getHeight($image_key, $man_name);
 
                 $params['x1'] = ($man_width/2)  - ($params['width']/2);
                 $params['y1'] = ($man_height/2) - ($params['height']/2);
@@ -439,12 +441,6 @@ abstract class CropCommandHandler
                     $man_name = $this->crop_config->getMan($image_key, $crop_name);
                     $target_name = $this->crop_config->getTarget($image_key, $crop_name);
 
-//                    $man_width = $this->image_config->getWidth($image_key, $man_name);
-//                    $man_height = $this->image_config->getHeight($image_key, $man_name);
-
-//                    $target_width = $this->image_config->getWidth($image_key, $target_name);
-//                    $target_height = $this->image_config->getHeight($image_key, $target_name);
-
                     //Костыль начало
                     $man_image_name = $image_key.'_'.$group_id.'_'.$man_name;
                     $target_image_name = $image_key.'_'.$group_id.'_'.$target_name;
@@ -472,23 +468,33 @@ abstract class CropCommandHandler
 
                     if(!$man_exist)
                     {
-                        throw new ImageFileSystemException('Нет файла по пути (с любым расширением) :'.$man_path);
+                        Log::info('Нет файла по пути (с любым расширением) :'.$man_path);
+
+                        $man_width = $this->image_config->getWidth($image_key, $man_name);
+                        $man_height = $this->image_config->getHeight($image_key, $man_name);
+                    }else{
+
+                        $man_path = $man_path.'.'.$man_path_ext;
+
+                        $img_man = Image::make($man_path);
+                        $man_width = $img_man->width();
+                        $man_height = $img_man->height();
                     }
+
                     if(!$target_exist)
                     {
-                        throw new ImageFileSystemException('Нет файла по пути (с любым расширением) :'.$target_path);
+                        Log::info('Нет файла по пути (с любым расширением) :'.$target_path);
+
+                        $target_width = $this->image_config->getWidth($image_key, $target_name);
+                        $target_height = $this->image_config->getHeight($image_key, $target_name);
+                    }else{
+
+                        $target_path = $target_path.'.'.$target_path_ext;
+
+                        $img_target = Image::make($target_path);
+                        $target_width = $img_target->width();
+                        $target_height = $img_target->height();
                     }
-
-                    $man_path = $man_path.'.'.$man_path_ext;
-                    $target_path = $target_path.'.'.$target_path_ext;
-
-                    $img_man = Image::make($man_path);
-                    $man_width = $img_man->width();
-                    $man_height = $img_man->height();
-
-                    $img_target = Image::make($target_path);
-                    $target_width = $img_target->width();
-                    $target_height = $img_target->height();
                     //--------------------------------------------------------------------------------
                     //Костыль конец
 
