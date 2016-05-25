@@ -67,6 +67,8 @@ class UpdateGroupItemCommandHandler {
                 $group_item->slug = $dataobj['slug'];
             }
 
+            $group_item->save();
+
             $qstorage = config('qstorage');
 
             if(array_key_exists($block_name, $qstorage))
@@ -142,9 +144,6 @@ class UpdateGroupItemCommandHandler {
                         }
                     }
                 }
-
-                $group_item->save();
-
 
                 //Сохраняем все внешние (отностиельно quickstorage поля)
                 foreach($this->saveMediator->list as $suffix=>$saver) {

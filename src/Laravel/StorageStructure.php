@@ -313,6 +313,16 @@ class StorageStructure implements StorageStructureInterface
     /**
      * @param string $blockName
      *
+     * @return bool
+     */
+    public function blockExist($blockName)
+    {
+        return !!config('qstorage.'.$blockName);
+    }
+
+    /**
+     * @param string $blockName
+     *
      * @return array
      */
     public function getBlockConfig($blockName)

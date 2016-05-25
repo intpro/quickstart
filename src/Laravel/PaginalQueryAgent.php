@@ -23,7 +23,6 @@ class PaginalQueryAgent implements PaginalQueryAgentInterface{
 
     /**
      * @param  \Interpro\QuickStorage\Concept\QueryAgent $queryAgent
-     * @param  \Interpro\QuickStorage\Concept\Repository $repository
      * @return void
      */
     public function __construct(QueryAgentInterface $queryAgent){

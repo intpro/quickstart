@@ -87,6 +87,13 @@ interface StorageStructure{
     /**
      * @param string $blockName
      *
+     * @return bool
+     */
+    public function blockExist($blockName);
+
+    /**
+     * @param string $blockName
+     *
      * @param string $groupName
      *
      * @return bool

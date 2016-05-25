@@ -227,17 +227,3 @@ class QueryAgent implements QueryAgentInterface{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-

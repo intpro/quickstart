@@ -26,7 +26,11 @@ class GroupSpecificationEq extends GroupSpecification
     {
         $field_name = $this->field_name;
 
-        return ($item->$field_name == $this->val);
+        if(in_array($item->$field_name, $this->val)){
+            return ($item->$field_name == $this->val);
+        }else{
+            return ($item->$field_name == $this->val);
+        }
     }
 
     /**
@@ -38,7 +42,11 @@ class GroupSpecificationEq extends GroupSpecification
      */
     public function asScope($query)
     {
-        return $query->where($this->getFieldName(), '=', $this->val);
+        if(is_array($this->val)){
+            return $query->whereIn($this->getFieldName(), $this->val);
+        }else{
+            return $query->where($this->getFieldName(), '=', $this->val);
+        }
     }
 
 }
