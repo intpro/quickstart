@@ -1,5 +1,6 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle;
 
+use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
 use Interpro\QuickStorage\Concept\Command\ReinitGroupCommand;
 use Interpro\QuickStorage\Laravel\Model\Block;
 use Interpro\QuickStorage\Laravel\Model\Bool;
@@ -12,14 +13,16 @@ use Interpro\QuickStorage\Laravel\Model\Textfield;
 
 class ReinitGroupCommandHandler {
 
+    private $imageLogicAgent;
+
     /**
-     * Update the command handler.
+     * Create the command handler.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ImageLogicAgent $imageLogicAgent)
     {
-        //
+        $this->imageLogicAgent = $imageLogicAgent;
     }
 
     /**
@@ -70,7 +73,34 @@ class ReinitGroupCommandHandler {
                                 $field = Pdatetime::firstOrCreate(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
 
                             }else if($typename == 'images'){
-                                $field = Imageitem::firstOrCreate(['block_name'=>$block_name, 'name'=>$fieldname, 'group_id'=>$group_id, 'group_name'=>$group_name]);
+
+                                $image_name = $group_name.'_'.$fieldname;
+
+                                $preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
+                                $primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                                $original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                                $secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
+                                $icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
+
+                                $image = Imageitem::where('block_name', $block_name)->where('group_name', $group_name)->where('group_id', $group_id)->where('name', $fieldname)->first();
+
+                                if(!$image)
+                                {
+                                    $image = new Imageitem;
+                                    $image->name = $fieldname;
+                                    $image->block_name = $block_name;
+                                    $image->group_name = $group_name;
+                                    $image->group_id = $group_id;
+                                }
+
+                                $image->preview_link   = $preview_link;
+                                $image->primary_link   = $primary_link;
+                                $image->original_link  = $original_link;
+                                $image->secondary_link = $secondary_link;
+                                $image->icon_link      = $icon_link;
+
+                                $image->save();
+
                             }
                         }
                     }

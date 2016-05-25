@@ -115,15 +115,23 @@ class ReinitOneBlockCommandHandler {
                 $secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
                 $icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
 
-                $image = Imageitem::firstOrCreate([
-                    'block_name'=>$block_name,
-                    'name'=>$fieldname,
-                    'preview_link'=>$preview_link,
-                    'primary_link'=>$primary_link,
-                    'original_link'=>$original_link,
-                    'secondary_link'=>$secondary_link,
-                    'icon_link'=>$icon_link
-                ]);
+                $image = Imageitem::where('block_name', $block_name)->where('group_id', 0)->where('name', $fieldname)->first();
+
+                if(!$image)
+                {
+                    $image = new Imageitem;
+                    $image->name = $fieldname;
+                    $image->block_name = $block_name;
+                    $image->group_id = 0;
+                }
+
+                $image->preview_link   = $preview_link;
+                $image->primary_link   = $primary_link;
+                $image->original_link  = $original_link;
+                $image->secondary_link = $secondary_link;
+                $image->icon_link      = $icon_link;
+
+                $image->save();
             }
         }
 
