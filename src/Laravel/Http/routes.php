@@ -2,10 +2,32 @@
 
 Route::group(['middleware' => 'auth', 'prefix' => 'adm'], function()
 {
-    Route::get('/init/{block}',                 ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInitBlock']);
-    Route::get('/reinit_block/{block}',         ['as' => 'ri_block',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitBlock']);
-    Route::get('/reinit_group/{block}/{group}', ['as' => 'ri_group',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitGroup']);
+    /**
+     * Создает записи каждому блоку и записи для каждого поля блока (группы вообще не трогает)
+     */
     Route::get('/init',                         ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInit']);
+
+    /**
+     * То же самое что и '/init', только для одного блока
+     */
+    Route::get('/init/{block}',                 ['as' => 'create_init', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createInitBlock']);
+
+    /**
+     * Реинит блока делается если поля блока изменились в конфиге.
+     * Реинит группы деляется если поля группы изменились в конфиге и происходит для каждого элемента группы
+     *
+     * Если блок отсутствует, то создает его и
+     * поля для него (группы не трогает)
+     */
+    Route::get('/reinit_block/{block}',         ['as' => 'ri_block',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitBlock']);
+
+    /**
+     * Создает записи полей (если нет) для элементов группы (блоки не трогает)
+     */
+    Route::get('/reinit_group/{block}/{group}', ['as' => 'ri_group',    'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@reinitGroup']);
+
+
+
 
     //Для групп внутри блоков:
     Route::get('/create/groupitem/{block}/{group}/{owner_id}', ['as' => 'create_groupitem', 'uses' => 'Interpro\QuickStorage\Laravel\Http\AdminCreateController@createGroupItem']);
