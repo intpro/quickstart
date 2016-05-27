@@ -132,8 +132,13 @@ class UpdateBlockCommandHandler {
                 //Сохраняем все внешние (отностиельно quickstorage поля)
                 foreach($this->saveMediator->list as $suffix=>$saver) {
                     if(array_key_exists($suffix, $dataobj)){
-                        $dataobj['entity_name'] = $block_name;
-                        $saver->save($suffix, $dataobj[$suffix]);
+
+                        foreach($dataobj[$suffix] as &$subarray){
+                            $subarray['entity_name'] = $block_name;
+                            $subarray['entity_id'] = 0;
+                        }
+
+                        $saver->save($dataobj[$suffix]);
                     }
                 }
 

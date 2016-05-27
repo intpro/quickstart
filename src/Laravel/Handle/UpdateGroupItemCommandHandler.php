@@ -148,9 +148,13 @@ class UpdateGroupItemCommandHandler {
                 //Сохраняем все внешние (отностиельно quickstorage поля)
                 foreach($this->saveMediator->list as $suffix=>$saver) {
                     if(array_key_exists($suffix, $dataobj)){
-                        $dataobj['entity_name'] = $group_name;
-                        $dataobj['entity_id'] = $group_id;
-                        $saver->save($suffix, $dataobj[$suffix]);
+
+                        foreach($dataobj[$suffix] as &$subarray){
+                            $subarray['entity_name'] = $group_name;
+                            $subarray['entity_id'] = $group_id;
+                        }
+
+                        $saver->save($dataobj[$suffix]);
                     }
                 }
 
