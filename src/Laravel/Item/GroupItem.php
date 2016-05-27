@@ -88,7 +88,7 @@ class GroupItem extends EntityItem implements GroupItemInterface
 
         }else{
 
-            throw new WrongGroupFieldNameException('Обращение к полю (подгруппе, картинке) группы ->'.$req_name.' '.$this->getField('group_name').' не соответствует формату ggg->xxx_field.');
+            throw new WrongGroupFieldNameException('Обращение к полю (подгруппе, картинке) группы ->'.$req_name.' '.$this->getField('group_name').' не соответствует формату ggg->xxx_type.');
         }
 
         return $value;
