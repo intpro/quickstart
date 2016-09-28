@@ -6,7 +6,6 @@ use Interpro\QuickStorage\Concept\Item\GroupItem;
 
 interface GroupSpecification
 {
-
     /**
      * Checks if given item meets all criteria
      *
@@ -30,7 +29,6 @@ interface GroupSpecification
      * @return $string
      */
     public function getGroup();
-
 
     /**
      *

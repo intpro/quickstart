@@ -3,6 +3,7 @@
 namespace Interpro\QuickStorage\Laravel\Item;
 
 use Illuminate\Support\Facades\App;
+use Interpro\QuickStorage\Concept\Exception\WrongGroupFieldNameException;
 use Interpro\QuickStorage\Laravel\Collection\GroupCollection;
 
 abstract class EntityItem
@@ -36,9 +37,15 @@ abstract class EntityItem
         return $this->fields[$field_name];
     }
 
-    protected function setField($field_name, $value)
+    public function setField($field_name, $value)
     {
-        return $this->fields[$field_name] = $value;
+        //Метод открыт как публичный по просьбе Ромы, чтобы умножать сумму в валюте на курс
+        if($field_name === 'group_name' or $field_name === 'block_name' or $field_name === 'id')
+        {
+            throw new WrongGroupFieldNameException('Нельзя менять поля ключи - group_name, block_name, id');
+        }
+
+        $this->fields[$field_name] = $value;
     }
 
     protected function getImage($image_name)
