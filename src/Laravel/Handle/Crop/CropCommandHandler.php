@@ -48,6 +48,18 @@ abstract class CropCommandHandler
         }
     }
 
+    //Тех. долг неправильной архитектуре картинок-кропов костыльный метод получения расширения
+    private function getExt($path_wo_ext)
+    {
+        foreach (glob($path_wo_ext.'*.*') as $file)
+        {
+            $inf = pathinfo($file);
+            return $inf['extension'];
+        }
+
+        throw new ImageFileSystemException('Не найден оригинал картинки для пути '.$path_wo_ext.'!');
+    }
+
     public function refreshBlock($block_name)
     {
         $crop_models = $this->qSource->cropQueryForBlock($block_name);
@@ -298,6 +310,8 @@ abstract class CropCommandHandler
     {
         $images_collection = $this->qSource->imageQueryForBlock($block_name);
 
+        $image_dir = $this->pathResolver->getImageDir();
+
         foreach($images_collection as $image_fields)
         {
             $image_name = $image_fields['name'];
@@ -333,6 +347,10 @@ abstract class CropCommandHandler
                     $target_x2 = floor($man_x2*$x_prop);
                     $target_y2 = floor($man_y2*$y_prop);
 
+                    $image_prefix = $image_dir.'/'.$image_key.'_'.$image_id;
+
+                    $ext = $this->getExt($image_dir.'/'.$image_key.'_'.$image_id);
+
                     $crop = Cropitem::where('block_name',$block_name)->
                         where('group_id', 0)->
                         where('name', $crop_name)->
@@ -344,6 +362,7 @@ abstract class CropCommandHandler
                         throw new CropNotFoundException('Не найден кроп '.$crop_name.' в базе данных для картинки '.$image_name.' блока '.$block_name);
                     }
 
+                    $crop->link         = $image_prefix.'_'.$crop_name.$ext;
                     $crop->man_x1       = $man_x1;
                     $crop->man_y1       = $man_y1;
                     $crop->man_x2       = $man_x2;
@@ -522,7 +541,7 @@ abstract class CropCommandHandler
                         'image_id' => $image_id,
                         'man_sufix' => $man_name,
                         'target_sufix' => $target_name,
-                        'link' => $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.jpg'
+                        'link' => $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.'.$target_path_ext
                     ]);
 
 //                    if(!$crop)
