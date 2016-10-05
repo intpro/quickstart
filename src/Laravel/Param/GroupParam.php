@@ -18,6 +18,11 @@ class GroupParam implements GroupParamInterface
         $this->permitted_params = ['take', 'skip'];
     }
 
+    public function reset($group_name)
+    {
+        $this->params[$group_name] = ['take'=>0, 'skip'=>0];
+    }
+
     private function createIfNotExist($group_name)
     {
         if(!array_key_exists($group_name, $this->params))

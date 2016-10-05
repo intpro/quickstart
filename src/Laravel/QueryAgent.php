@@ -108,9 +108,7 @@ class QueryAgent implements QueryAgentInterface{
     public function getBlock($name, $sorts, $specs, $params=[])
     {
         $this->setSorts($sorts);
-
         $this->setEqSpecs($specs);
-
         $this->setParams($params);
 
         $fields_arr = $this->repository->getBlock($name);
@@ -132,10 +130,12 @@ class QueryAgent implements QueryAgentInterface{
      */
     public function getGroup($block_name, $name, $sorts, $specs, $params=[])
     {
+        $this->groupSortingSet->reset($name);
+        $this->groupSpecificationSet->reset($name);
+        $this->groupParam->reset($name);
+
         $this->setSorts($sorts);
-
         $this->setEqSpecs($specs);
-
         $this->setParams($params);
 
         $items_arr = $this->repository->getGroup($block_name, $name);
@@ -155,6 +155,7 @@ class QueryAgent implements QueryAgentInterface{
      */
     public function getGroupCount($block_name, $name, $specs)
     {
+        $this->groupSpecificationSet->reset($name);
         $this->setEqSpecs($specs);
 
         $this->repository->getGroupCount($block_name, $name);
@@ -172,10 +173,12 @@ class QueryAgent implements QueryAgentInterface{
      */
     public function getGroupFlat($block_name, $name, $sorts, $specs, $params=[])
     {
+        $this->groupSortingSet->reset($name);
+        $this->groupSpecificationSet->reset($name);
+        $this->groupParam->reset($name);
+
         $this->setSorts($sorts);
-
         $this->setEqSpecs($specs);
-
         $this->setParams($params);
 
         $items_arr = $this->repository->getGroupFlat($block_name, $name);

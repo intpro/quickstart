@@ -6,6 +6,13 @@ interface GroupParam
 {
     /**
      * @param string $group_name
+     *
+     * @return void
+     */
+    public function reset($group_name);
+
+    /**
+     * @param string $group_name
      * @param string $param_name
      * @param $value
      *
