@@ -41,7 +41,7 @@ class QueryAgent implements QueryAgentInterface{
         $this->groupParam = $groupParam;
     }
 
-    protected function setSorts($sorts)
+    public function setSorts(array $sorts)
     {
         foreach($sorts as $group_name=>$sort_arr)
         {
@@ -64,7 +64,7 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
-    protected function setEqSpecs($specs)
+    public function setEqSpecs(array $specs)
     {
         foreach($specs as $group_name=>$spec_arr)
         {
@@ -82,7 +82,7 @@ class QueryAgent implements QueryAgentInterface{
         }
     }
 
-    protected function setParams($params)
+    public function setParams(array $params)
     {
         foreach($params as $group_name=>$param_arr)
         {

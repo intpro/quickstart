@@ -5,6 +5,24 @@ namespace Interpro\QuickStorage\Concept;
 interface QueryAgent{
 
     /**
+     * @param array $sorts
+     * @return void
+     */
+    public function setSorts(array $sorts);
+
+    /**
+     * @param array $sorts
+     * @return void
+     */
+    public function setEqSpecs(array $sorts);
+
+    /**
+     * @param array $sorts
+     * @return void
+     */
+    public function setParams(array $sorts);
+
+    /**
      * Получить элемент блока с полями
      *
      * @param string $name
