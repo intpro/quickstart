@@ -83,7 +83,7 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
             $target_name = $file_name.'_'.$crop_item['target_sufix'];
             $result_name = $file_name.'_'.$crop_item['name'];
 
-            $color = $this->crop_config->getColor($image_conf_name, $crop_item->name);
+            $color = $this->crop_config->getColor($image_conf_name, $crop_item['name']);
 
             $this->croper->crop(
                 $target_name,

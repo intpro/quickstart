@@ -90,7 +90,7 @@ abstract class CropCommandHandler
             $target_name = $file_name.'_'.$item['target_sufix'];
             $result_name = $file_name.'_'.$item['name'];
 
-            $color = $this->crop_config->getColor($image_name, $item->name);
+            $color = $this->crop_config->getColor($image_name, $item['name']);
 
             $this->croper->crop(
                 $target_name,
@@ -117,7 +117,7 @@ abstract class CropCommandHandler
             $target_name = $file_name.'_'.$item['target_sufix'];
             $result_name = $file_name.'_'.$item['name'];
 
-            $color = $this->crop_config->getColor($image_name, $item->name);
+            $color = $this->crop_config->getColor($image_name, $item['name']);
 
             $this->croper->crop(
                 $target_name,
