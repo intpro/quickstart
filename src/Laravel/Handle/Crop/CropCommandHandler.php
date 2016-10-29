@@ -90,13 +90,16 @@ abstract class CropCommandHandler
             $target_name = $file_name.'_'.$item['target_sufix'];
             $result_name = $file_name.'_'.$item['name'];
 
+            $color = $this->crop_config->getColor($image_name, $item->name);
+
             $this->croper->crop(
                 $target_name,
                 $result_name,
                 $item['target_x1'],
                 $item['target_y1'],
                 $item['target_x2'],
-                $item['target_y2']
+                $item['target_y2'],
+                $color
             );
 
             $cropModel = Cropitem::find($item['id']);
@@ -114,13 +117,16 @@ abstract class CropCommandHandler
             $target_name = $file_name.'_'.$item['target_sufix'];
             $result_name = $file_name.'_'.$item['name'];
 
+            $color = $this->crop_config->getColor($image_name, $item->name);
+
             $this->croper->crop(
                 $target_name,
                 $result_name,
                 $item['target_x1'],
                 $item['target_y1'],
                 $item['target_x2'],
-                $item['target_y2']
+                $item['target_y2'],
+                $color
             );
 
             $cropModel = Cropitem::find($item['id']);

@@ -1,5 +1,6 @@
 <?php namespace Interpro\QuickStorage\Laravel\Handle\Image;
 
+use Interpro\ImageFileLogic\Concept\CropConfig;
 use Interpro\ImageFileLogic\Concept\Croper;
 use Interpro\ImageFileLogic\Concept\ImageLogicAgent;
 use Interpro\ImageFileLogic\Laravel\Action\ExistImageAction;
@@ -12,6 +13,7 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
 {
     private $imageLogicAgent;
     protected $croper;
+    private $crop_config;
 
     /**
      * Interpro\ImageFileLogic\Concept\ImageLogicAgent $imageLogicAgent
@@ -19,10 +21,11 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
      *
      * @return void
      */
-    public function __construct(ImageLogicAgent $imageLogicAgent, Croper $croper)
+    public function __construct(ImageLogicAgent $imageLogicAgent, Croper $croper, CropConfig $crop_config)
     {
         $this->imageLogicAgent = $imageLogicAgent;
         $this->croper = $croper;
+        $this->crop_config = $crop_config;
     }
 
     /**
@@ -33,6 +36,8 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
     {
 
         $config_name = $command->group_name.'_'.$command->image_name;
+
+        $config = $this->crop_config->getConfig($config_name);
 
         $fields = $this->qSource->oneImageQueryForGroup($command->block_name, $command->group_name, $command->group_id, $command->image_name);
 
@@ -78,13 +83,16 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
             $target_name = $file_name.'_'.$crop_item['target_sufix'];
             $result_name = $file_name.'_'.$crop_item['name'];
 
+            $color = $this->crop_config->getColor($image_conf_name, $crop_item->name);
+
             $this->croper->crop(
                 $target_name,
                 $result_name,
                 $crop_item['target_x1'],
                 $crop_item['target_y1'],
                 $crop_item['target_x2'],
-                $crop_item['target_y2']
+                $crop_item['target_y2'],
+                $color
             );
 
             $cropModel = Cropitem::find($crop_item['id']);
