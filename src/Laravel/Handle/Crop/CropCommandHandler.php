@@ -360,14 +360,14 @@ abstract class CropCommandHandler
                     $crop = Cropitem::where('block_name',$block_name)->
                         where('group_id', 0)->
                         where('name', $crop_name)->
-                        where('image_name', $image_name)->
-                        where('image_id', $image_id)->first();
+                        where('image_name', $image_name)->first();
 
                     if(!$crop)
                     {
                         throw new CropNotFoundException('Не найден кроп '.$crop_name.' в базе данных для картинки '.$image_name.' блока '.$block_name);
                     }
 
+                    $crop->image_id     = $image_id;
                     $crop->link         = $image_prefix.'_'.$crop_name.$ext;
                     $crop->man_x1       = $man_x1;
                     $crop->man_y1       = $man_y1;
@@ -396,6 +396,8 @@ abstract class CropCommandHandler
 
         //Параметры кропов по умолчанию: позиционируем кроп на середину
         foreach($crop_templ_config as $image_key => &$crops){
+
+            $a=0;
 
             foreach($crops as $crop_name => &$params){
 
@@ -531,29 +533,29 @@ abstract class CropCommandHandler
                     $target_x2 = floor($man_x2*$x_prop);
                     $target_y2 = floor($man_y2*$y_prop);
 
-//                    $crop = Cropitem::where('block_name',$block_name)->
-//                        where('group_name', $group_name)->
-//                        where('group_id', $group_id)->
-//                        where('name', $crop_name)->
-//                        where('image_name', $image_name)->
-//                        where('image_id', $image_id)->first();
+                    Cropitem::where('block_name',$block_name)->
+                        where('group_name', $group_name)->
+                        where('group_id', $group_id)->
+                        where('name', $crop_name)->
+                        where('image_name', $image_name)->delete();
 
-                    $crop = Cropitem::firstOrNew([
-                        'block_name' => $block_name,
-                        'group_name' => $group_name,
-                        'group_id' => $group_id,
-                        'name' => $crop_name,
-                        'image_name' => $image_name,
-                        'image_id' => $image_id,
-                        'man_sufix' => $man_name,
-                        'target_sufix' => $target_name,
-                        'link' => $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.'.$target_path_ext
-                    ]);
+                    $crop = new Cropitem();
 
 //                    if(!$crop)
 //                    {
 //                        throw new CropNotFoundException('Не найден кроп '.$crop_name.' в базе данных для картинки '.$image_name.' группы '.$group_name);
 //                    }
+
+                    $crop->block_name = $block_name;
+                    $crop->group_name = $group_name;
+                    $crop->group_id   = $group_id;
+                    $crop->name       = $crop_name;
+                    $crop->image_name = $image_name;
+
+                    $crop->image_id     = $image_id;
+                    $crop->man_sufix    = $man_name;
+                    $crop->target_sufix = $target_name;
+                    $crop->link         = $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.'.$target_path_ext;
 
                     $crop->man_x1       = $man_x1;
                     $crop->man_y1       = $man_y1;
