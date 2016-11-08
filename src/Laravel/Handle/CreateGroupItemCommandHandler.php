@@ -94,6 +94,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $numb = Numb::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->numbs()->save($numb);
+                    $dataArr[$fieldname] = 0;
                 }
             }
 
@@ -103,6 +104,7 @@ class CreateGroupItemCommandHandler {
                 {
                     $boolitem = Bool::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
                     $newGroupItem->bools()->save($boolitem);
+                    $dataArr[$fieldname] = false;
                 }
             }
 
