@@ -10,7 +10,7 @@ class UpdateBlockCropCommandHandler extends CropCommandHandler
      */
     public function handle(UpdateBlockCropCommand $command)
     {
-        $this->updateDBForBlock($command->block_name, $command->crops);
+        $this->updateDBForBlock($command->block_name);
         $this->refreshBlock($command->block_name);
     }
 

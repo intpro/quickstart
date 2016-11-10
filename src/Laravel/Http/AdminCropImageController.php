@@ -19,7 +19,7 @@ class AdminCropImageController extends Controller
                 try {
 
                     if (array_key_exists('crops', $dataobj)){
-                        $this->dispatch(new UpdateOneGroupCropCommand($dataobj['block'], $dataobj['group'], $dataobj['group_id'], $dataobj['crops']));
+                        $this->dispatch(new UpdateOneGroupCropCommand($dataobj['block'], $dataobj['group'], $dataobj['group_id']));
                     }else{
                         return ['status' => ('Не переданы координаты кропов!')];
                     }

@@ -23,8 +23,7 @@ class AdminUpdateController extends Controller
 
                     $this->dispatch(new UpdateBlockCommand($dataobj['block'], $dataobj));
 
-                    $crops = array_key_exists('crops', $dataobj) ? $dataobj['crops'] : [];
-                    $this->dispatch(new UpdateBlockCropCommand($dataobj['block'], $crops));
+                    $this->dispatch(new UpdateBlockCropCommand($dataobj['block']));
 
                     return ['status' => 'OK'];
 
@@ -53,8 +52,7 @@ class AdminUpdateController extends Controller
 
                     $this->dispatch(new UpdateGroupItemCommand($dataobj['group_id'], $dataobj));
 
-                    $crops = array_key_exists('crops', $dataobj) ? $dataobj['crops'] : [];
-                    $this->dispatch(new UpdateOneGroupCropCommand($dataobj['block'], $dataobj['group'], $dataobj['group_id'], $crops));
+                    $this->dispatch(new UpdateOneGroupCropCommand($dataobj['block'], $dataobj['group'], $dataobj['group_id']));
 
                     return ['status' => 'OK'];
 

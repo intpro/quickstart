@@ -314,11 +314,11 @@ abstract class CropCommandHandler
 
     }
 
-    public function updateDBForBlock($block_name, $crops_config)
+    public function updateDBForBlock($block_name)
     {
         $images_collection = $this->qSource->imageQueryForBlock($block_name);
 
-        $image_dir = $this->pathResolver->getImageDir();
+        $crop_dir = $this->pathResolver->getImageCropDir();
 
         foreach($images_collection as $image_fields)
         {
@@ -327,126 +327,60 @@ abstract class CropCommandHandler
             $image_key  = $block_name.'_'.$image_name;
             $image_id   = $image_fields['id'];
 
-            if(array_key_exists($image_key, $crops_config))
+            $crops = $this->crop_config->getConfig($image_key);
+
+            foreach($crops as $crop_name => $params)
             {
-                $crops = &$crops_config[$image_key];
+                $man_name = $this->crop_config->getMan($image_key, $crop_name);
+                $target_name = $this->crop_config->getTarget($image_key, $crop_name);
 
-                foreach($crops as $crop_name => $params)
+                $crop = Cropitem::where('block_name',$block_name)->
+                    where('group_id', 0)->
+                    where('name', $crop_name)->
+                    where('image_name', $image_name)->first();
+
+
+                $crop_half_path = $crop_dir.'/'.$image_key.'_0_'.$crop_name;
+
+                $crop_file = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
+
+                foreach (glob($crop_half_path.'*.*') as $file)
                 {
-                    $man_x1 = $params['x1'];
-                    $man_x2 = $params['x2'];
-                    $man_y1 = $params['y1'];
-                    $man_y2 = $params['y2'];
+                    $inf = pathinfo($file);
+                    $ext = $inf['extension'];
 
-                    $man_name = $this->crop_config->getMan($image_key, $crop_name);
-                    $target_name = $this->crop_config->getTarget($image_key, $crop_name);
-
-                    $man_width = $this->image_config->getWidth($image_key, $man_name);
-                    $man_height = $this->image_config->getHeight($image_key, $man_name);
-
-                    $target_width = $this->image_config->getWidth($image_key, $target_name);
-                    $target_height = $this->image_config->getHeight($image_key, $target_name);
-
-                    $x_prop = ($man_width/$target_width);
-                    $y_prop = ($man_height/$target_height);
-
-                    $target_x1 = floor($man_x1*$x_prop);
-                    $target_y1 = floor($man_y1*$y_prop);
-                    $target_x2 = floor($man_x2*$x_prop);
-                    $target_y2 = floor($man_y2*$y_prop);
-
-                    $image_prefix = $image_dir.'/'.$image_key.'_'.$image_id;
-
-                    $ext = $this->getExt($image_dir.'/'.$image_key.'_'.$image_id);
-
-                    $crop = Cropitem::where('block_name',$block_name)->
-                        where('group_id', 0)->
-                        where('name', $crop_name)->
-                        where('image_name', $image_name)->first();
-
-                    if(!$crop)
-                    {
-                        throw new CropNotFoundException('Не найден кроп '.$crop_name.' в базе данных для картинки '.$image_name.' блока '.$block_name);
-                    }
-
-                    $crop->image_id     = $image_id;
-                    $crop->link         = $image_prefix.'_'.$crop_name.$ext;
-                    $crop->man_x1       = $man_x1;
-                    $crop->man_y1       = $man_y1;
-                    $crop->man_x2       = $man_x2;
-                    $crop->man_y2       = $man_y2;
-                    $crop->target_x1    = $target_x1;
-                    $crop->target_y1    = $target_y1;
-                    $crop->target_x2    = $target_x2;
-                    $crop->target_y2    = $target_y2;
-
-                    $crop->save();
-
+                    $crop_file = $crop_half_path.'.'.$ext;
                 }
+
+                if(!$crop)
+                {
+                    $crop->name = $crop_name;
+                    $crop->block_name = $block_name;
+                    $crop->image_name = $image_name;
+                    $crop->group_id = 0;
+                    $crop->cache_index = 0;
+                }
+
+                $crop->image_id = $image_id;
+                $crop->man_sufix = $man_name;
+                $crop->target_sufix = $target_name;
+                $crop->cache_index++;
+                $crop->image_id    = $image_id;
+                $crop->link        = $crop_file;
+
+                $crop->save();
             }
         }
     }
 
-    public function updateDBForGroupItem($block_name, $group_name, $group_id, $crops_config)
+    public function updateDBForGroupItem($block_name, $group_name, $group_id)
     {
         $image_dir = $this->pathResolver->getImageDir();
 
         //На середину - по умолчанию
         $images_collection = $this->qSource->oneImageQueryForGroup($block_name, $group_name, $group_id);
 
-        $crop_templ_config = config('crop');
-
-        //Параметры кропов по умолчанию: позиционируем кроп на середину
-        foreach($crop_templ_config as $image_key => &$crops){
-
-            $a=0;
-
-            foreach($crops as $crop_name => &$params){
-
-                $man_name = $this->crop_config->getMan($image_key, $crop_name);
-
-                //Костыль начало
-                $man_image_name = $image_key.'_'.$group_id.'_'.$man_name;
-
-                //Костыль: рассчет от реального размера картинки
-                $man_path = $image_dir.'/'.$man_image_name;
-                $path_ext = 'jpg';
-                $man_exist = false;
-
-                foreach (glob($man_path.'*.*') as $file)
-                {
-                    $inf = pathinfo($file);
-                    $path_ext = $inf['extension'];
-                    $man_exist = true;
-                }
-
-                if(!$man_exist)
-                {
-                    Log::info('Нет файла по пути (с любым расширением) :'.$man_path);
-
-                    $man_width = $this->image_config->getWidth($image_key, $man_name);
-                    $man_height = $this->image_config->getHeight($image_key, $man_name);
-                }else{
-                    $man_path = $man_path.'.'.$path_ext;
-
-                    $img_man = Image::make($man_path);
-                    $man_width = $img_man->width();
-                    $man_height = $img_man->height();
-                }
-
-                //--------------------------------------------------------------------------------
-
-                $params['x1'] = ($man_width/2)  - ($params['width']/2);
-                $params['y1'] = ($man_height/2) - ($params['height']/2);
-                $params['x2'] = ($man_width/2)  + ($params['width']/2);
-                $params['y2'] = ($man_height/2) + ($params['height']/2);
-            }
-        }
-        //---------------------------------------------------------------
-
-
-        $crops_config = array_merge($crop_templ_config, $crops_config);
-
+        $crop_dir = $this->pathResolver->getImageCropDir();
 
         foreach($images_collection as $image_fields)
         {
@@ -455,122 +389,48 @@ abstract class CropCommandHandler
             $image_key  = $group_name.'_'.$image_name;
             $image_id   = $image_fields['id'];
 
-            //Обрабатываем совмещенный (с приоритетом присланных параметров) конфиг кропа, и пишем в базу
-            if(array_key_exists($image_key, $crops_config))
+            $crops = $this->crop_config->getConfig($image_key);
+
+            foreach($crops as $crop_name => $params)
             {
-                $crops = &$crops_config[$image_key];
+                $man_name = $this->crop_config->getMan($image_key, $crop_name);
+                $target_name = $this->crop_config->getTarget($image_key, $crop_name);
 
-                foreach($crops as $crop_name => $params_1)
+                $crop = Cropitem::where('block_name',$block_name)->
+                    where('group_name', $group_name)->
+                    where('group_id', $group_id)->
+                    where('name', $crop_name)->
+                    where('image_name', $image_name)->first();
+
+                $crop_half_path = $crop_dir.'/'.$image_key.'_'.$group_id.'_'.$crop_name;
+
+                $crop_file = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
+
+                foreach (glob($crop_half_path.'*.*') as $file)
                 {
-                    $man_x1 = $params_1['x1'];
-                    $man_x2 = $params_1['x2'];
-                    $man_y1 = $params_1['y1'];
-                    $man_y2 = $params_1['y2'];
+                    $inf = pathinfo($file);
+                    $ext = $inf['extension'];
 
-                    $man_name = $this->crop_config->getMan($image_key, $crop_name);
-                    $target_name = $this->crop_config->getTarget($image_key, $crop_name);
+                    $crop_file = $crop_half_path.'.'.$ext;
+                }
 
-                    //Костыль начало
-                    $man_image_name = $image_key.'_'.$group_id.'_'.$man_name;
-                    $target_image_name = $image_key.'_'.$group_id.'_'.$target_name;
-
-                    //Костыль: рассчет от реального размера картинки
-                    $man_path = $image_dir.'/'.$man_image_name;
-                    $target_path = $image_dir.'/'.$target_image_name;
-                    $man_path_ext = 'jpg';
-                    $target_path_ext = 'jpg';
-                    $man_exist = false;
-                    $target_exist = false;
-
-                    foreach (glob($man_path.'*.*') as $file)
-                    {
-                        $inf = pathinfo($file);
-                        $man_path_ext = $inf['extension'];
-                        $man_exist = true;
-                    }
-                    foreach (glob($target_path.'*.*') as $file)
-                    {
-                        $inf = pathinfo($file);
-                        $target_path_ext = $inf['extension'];
-                        $target_exist = true;
-                    }
-
-                    if(!$man_exist)
-                    {
-                        Log::info('Нет файла по пути (с любым расширением) :'.$man_path);
-
-                        $man_width = $this->image_config->getWidth($image_key, $man_name);
-                        $man_height = $this->image_config->getHeight($image_key, $man_name);
-                    }else{
-
-                        $man_path = $man_path.'.'.$man_path_ext;
-
-                        $img_man = Image::make($man_path);
-                        $man_width = $img_man->width();
-                        $man_height = $img_man->height();
-                    }
-
-                    if(!$target_exist)
-                    {
-                        Log::info('Нет файла по пути (с любым расширением) :'.$target_path);
-
-                        $target_width = $this->image_config->getWidth($image_key, $target_name);
-                        $target_height = $this->image_config->getHeight($image_key, $target_name);
-                    }else{
-
-                        $target_path = $target_path.'.'.$target_path_ext;
-
-                        $img_target = Image::make($target_path);
-                        $target_width = $img_target->width();
-                        $target_height = $img_target->height();
-                    }
-                    //--------------------------------------------------------------------------------
-                    //Костыль конец
-
-                    $x_prop = ($man_width/$target_width);
-                    $y_prop = ($man_height/$target_height);
-
-                    $target_x1 = floor($man_x1*$x_prop);
-                    $target_y1 = floor($man_y1*$y_prop);
-                    $target_x2 = floor($man_x2*$x_prop);
-                    $target_y2 = floor($man_y2*$y_prop);
-
-                    Cropitem::where('block_name',$block_name)->
-                        where('group_name', $group_name)->
-                        where('group_id', $group_id)->
-                        where('name', $crop_name)->
-                        where('image_name', $image_name)->delete();
-
-                    $crop = new Cropitem();
-
-//                    if(!$crop)
-//                    {
-//                        throw new CropNotFoundException('Не найден кроп '.$crop_name.' в базе данных для картинки '.$image_name.' группы '.$group_name);
-//                    }
-
+                if(!$crop)
+                {
                     $crop->block_name = $block_name;
                     $crop->group_name = $group_name;
                     $crop->group_id   = $group_id;
                     $crop->name       = $crop_name;
                     $crop->image_name = $image_name;
-
-                    $crop->image_id     = $image_id;
-                    $crop->man_sufix    = $man_name;
-                    $crop->target_sufix = $target_name;
-                    $crop->link         = $this->path_prefix.$image_key.'_'.$group_id.'_'.$crop_name.'.'.$target_path_ext;
-
-                    $crop->man_x1       = $man_x1;
-                    $crop->man_y1       = $man_y1;
-                    $crop->man_x2       = $man_x2;
-                    $crop->man_y2       = $man_y2;
-                    $crop->target_x1    = $target_x1;
-                    $crop->target_y1    = $target_y1;
-                    $crop->target_x2    = $target_x2;
-                    $crop->target_y2    = $target_y2;
-
-                    $crop->save();
-
+                    $crop->cache_index = 0;
                 }
+
+                $crop->image_id = $image_id;
+                $crop->man_sufix = $man_name;
+                $crop->target_sufix = $target_name;
+                $crop->cache_index++;
+                $crop->link        = $crop_file;
+
+                $crop->save();
             }
         }
     }
