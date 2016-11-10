@@ -38,7 +38,7 @@ class CropRepository implements CropRepositoryInterface
                     $current_group_id = $crop_fields['group_id'];
                     $current_key = $crop_key.'_'.$current_group_id;
 
-                    $new_crop = new CropItem($current_key, $crop_fields);
+                    $new_crop = new CropItem($crop_key, $current_group_id, $crop_fields);
 
                     $this->crops[$current_key] = $new_crop;
 
@@ -65,7 +65,7 @@ class CropRepository implements CropRepositoryInterface
 
                 $crop_fields = $this->qSource->cropQueryForBlockForCrop($block_name, $crop_name, $image_name);
 
-                $crop = new CropItem($crop_key, $crop_fields);
+                $crop = new CropItem($block_name, 0, $crop_fields);
 
                 $this->crops[$crop_key] = $crop;
             }

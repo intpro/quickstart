@@ -13,6 +13,7 @@ class CropItem implements CropItemInterface
     private $value;
     private $name;
     private $crop_name;
+    private $crop_config_name;
     private $block_name;
     private $group_name;
     private $group_id;
@@ -38,12 +39,15 @@ class CropItem implements CropItemInterface
 
     /**
      * string $name
+     * string $id
      * array $fields
      * @return void
      */
-    public function __construct($crop_name, $fields)
+    public function __construct($crop_config_name, $id, $fields)
     {
-        $this->crop_name = $crop_name;
+        $this->crop_name = $crop_config_name.'_'.$id;
+        $this->crop_config_name = $crop_config_name;
+        $this->id = $id;
 
         $field_names = ['id', 'value', 'name', 'image_name', 'block_name', 'group_name', 'group_id', 'image_id', 'prefix',
             'alt', 'man_sufix', 'target_sufix', 'link', 'cache_index',
@@ -58,6 +62,16 @@ class CropItem implements CropItemInterface
                 $this->$field_name = $fields[$field_name];
             }
         }
+    }
+
+    public function getConfigName()
+    {
+        return $this->config_name;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function __get($req_name)
