@@ -349,7 +349,7 @@ abstract class CropCommandHandler
                     $inf = pathinfo($file);
                     $ext = $inf['extension'];
 
-                    $crop_file = $crop_half_path.'.'.$ext;
+                    $crop_file = 'crops/'.$image_key.'_0_'.$crop_name.'.'.$ext;
                 }
 
                 if(!$crop)
@@ -411,7 +411,7 @@ abstract class CropCommandHandler
                     $inf = pathinfo($file);
                     $ext = $inf['extension'];
 
-                    $crop_file = $crop_half_path.'.'.$ext;
+                    $crop_file = 'crops/'.$image_key.'_'.$group_id.'_'.$crop_name.'.'.$ext;
                 }
 
                 if(!$crop)

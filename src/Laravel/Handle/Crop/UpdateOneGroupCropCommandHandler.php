@@ -12,7 +12,7 @@ class UpdateOneGroupCropCommandHandler extends CropCommandHandler
     public function handle(UpdateOneGroupCropCommand $command)
     {
         $this->updateDBForGroupItem($command->block_name, $command->group_name, $command->group_id);
-        $this->refreshGroupItem($command->block_name, $command->group_name, $command->group_id);
+        //$this->refreshGroupItem($command->block_name, $command->group_name, $command->group_id);
     }
 
 }
