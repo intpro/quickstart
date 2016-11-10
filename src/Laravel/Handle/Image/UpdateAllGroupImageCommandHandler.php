@@ -27,7 +27,7 @@ class UpdateAllGroupImageCommandHandler extends ImageCommandHandler
 
         foreach($images as $fields)
         {
-            $imageItem = new ImageItem($config_name.'_'.$images['group_id'], $fields);
+            $imageItem = new ImageItem($config_name, $images['group_id'], $fields);
 
             $headAction->applyFor($imageItem);
         }

@@ -83,56 +83,58 @@ abstract class CropCommandHandler
 
     private function cropBlock($crop_models)
     {
-        foreach($crop_models as $item)
-        {
-            $image_name = $item['block_name'].'_'.$item['image_name'];
-            $file_name = $image_name.'_0';
-            $target_name = $file_name.'_'.$item['target_sufix'];
-            $result_name = $file_name.'_'.$item['name'];
-
-            $color = $this->crop_config->getColor($image_name, $item['name']);
-
-            $this->croper->crop(
-                $target_name,
-                $result_name,
-                $item['target_x1'],
-                $item['target_y1'],
-                $item['target_x2'],
-                $item['target_y2'],
-                $color
-            );
-
-            $cropModel = Cropitem::find($item['id']);
-            $cropModel->cache_index++;
-            $cropModel->save();
-        }
+//        foreach($crop_models as $item)
+//        {
+//            $image_name = $item['block_name'].'_'.$item['image_name'];
+//            $file_name = $image_name.'_0';
+//            $target_name = $file_name.'_'.$item['target_sufix'];
+//            $result_name = $file_name.'_'.$item['name'];
+//
+//            $color = $this->crop_config->getColor($image_name, $item['name']);
+//
+//            $this->croper->crop(
+//                $file_name,
+//                $target_name,
+//                $result_name,
+//                $item['target_x1'],
+//                $item['target_y1'],
+//                $item['target_x2'],
+//                $item['target_y2'],
+//                $color
+//            );
+//
+//            $cropModel = Cropitem::find($item['id']);
+//            $cropModel->cache_index++;
+//            $cropModel->save();
+//        }
     }
 
     private function cropGroupItems($crop_models)
     {
-        foreach($crop_models as $item)
-        {
-            $image_name = $item['group_name'].'_'.$item['image_name'];
-            $file_name = $image_name.'_'.$item['group_id'];
-            $target_name = $file_name.'_'.$item['target_sufix'];
-            $result_name = $file_name.'_'.$item['name'];
-
-            $color = $this->crop_config->getColor($image_name, $item['name']);
-
-            $this->croper->crop(
-                $target_name,
-                $result_name,
-                $item['target_x1'],
-                $item['target_y1'],
-                $item['target_x2'],
-                $item['target_y2'],
-                $color
-            );
-
-            $cropModel = Cropitem::find($item['id']);
-            $cropModel->cache_index++;
-            $cropModel->save();
-        }
+//        foreach($crop_models as $item)
+//        {
+//            $image_name = $item['group_name'].'_'.$item['image_name'];
+//            $file_name = $image_name.'_'.$item['group_id'];
+//            $target_name = $file_name.'_'.$item['target_sufix'];
+//            $result_name = $file_name.'_'.$item['name'];
+//
+//            $color = $this->crop_config->getColor($image_name, $item['name']);
+//
+//            $this->croper->crop(
+//                $file_name,
+//                $target_name,
+//                $result_name,
+//                $item['target_x1'],
+//                $item['target_y1'],
+//                $item['target_x2'],
+//                $item['target_y2'],
+//                $color
+//            );
+//
+//            $cropModel = Cropitem::find($item['id']);
+//            $cropModel->cache_index++;
+//            $cropModel->save();
+//        }
     }
 
     public function initDBForBlock($block_name)

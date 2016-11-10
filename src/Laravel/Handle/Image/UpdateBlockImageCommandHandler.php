@@ -41,7 +41,7 @@ class UpdateBlockImageCommandHandler extends ImageCommandHandler
 
             $fields = $this->imageRepository->getBlockImage($command->block_name, $command->image_name);
 
-            $imageItem = new ImageItem($config_name.'_0', $fields);
+            $imageItem = new ImageItem($config_name, 0, $fields);
 
             $headAction = new CreateImageAction($command->req_orig_file);
 

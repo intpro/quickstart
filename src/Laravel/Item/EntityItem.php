@@ -56,7 +56,7 @@ abstract class EntityItem
 
         $fields = $this->getImageFields($image_name);
 
-        $imageItem = new ImageItem($config_name.'_'.$id, $fields);
+        $imageItem = new ImageItem($config_name, $id, $fields);
 
         return $imageItem;
     }

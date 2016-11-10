@@ -28,17 +28,21 @@ class ImageItem implements ImageItemInterface
 
     private $ext;
     private $image_name;
+    private $config_name;
 
     private $crop_repository;
 
     /**
      * string $name
      * array $fields
+     *
      * @return void
      */
-    public function __construct($image_name, $fields)
+    public function __construct($config_name, $id, $fields)
     {
-        $this->image_name = $image_name;
+        $this->image_name = $config_name.'_'.$id;
+        $this->id = $id;
+        $this->config_name = $config_name;
 
         $field_names = ['id', 'value', 'name', 'block_name', 'group_name', 'group_id', 'prefix',
             'alt', 'original_link', 'primary_link', 'secondary_link', 'icon_link', 'preview_link', 'cache_index'];
@@ -54,6 +58,16 @@ class ImageItem implements ImageItemInterface
         }
 
         $this->crop_repository = App::make('Interpro\QuickStorage\Concept\CropRepository');
+    }
+
+    public function getConfigName()
+    {
+        return $this->config_name;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     public function __get($req_name)

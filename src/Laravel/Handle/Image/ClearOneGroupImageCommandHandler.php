@@ -41,7 +41,7 @@ class ClearOneGroupImageCommandHandler extends ImageCommandHandler
 
         $fields = $this->qSource->oneImageQueryForGroup($command->block_name, $command->group_name, $command->group_id, $command->image_name);
 
-        $imageItem = new ImageItem($config_name.'_'.$command->group_id, $fields);
+        $imageItem = new ImageItem($config_name, $command->group_id, $fields);
 
         $headAction = new ExistImageAction();
 
