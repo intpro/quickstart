@@ -232,8 +232,9 @@ abstract class CropCommandHandler
                         $result_width = floor($target_width*($params['width']/$man_width));
                         $result_height = floor($target_height*($params['height']/$man_height));
 
-                        $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
+                        $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name]);
 
+                        $crop->image_id     = $image_id;
                         $crop->link         = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
                         $crop->man_sufix    = $params['man'];
                         $crop->target_sufix = $params['target'];
@@ -291,8 +292,9 @@ abstract class CropCommandHandler
                         $result_width = floor($target_width*($params['width']/$man_width));
                         $result_height = floor($target_height*($params['height']/$man_height));
 
-                        $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name, 'image_id' => $image_id]);
+                        $crop = Cropitem::firstOrNew(['block_name' => $block_name, 'group_name' => $group_name, 'group_id' => $group_id, 'name' => $crop_name, 'image_name' => $image_name]);
 
+                        $crop->image_id     = $image_id;
                         $crop->link         = $this->phAgent->getLink($params['width'], $params['height'], $color = '#808080');
                         $crop->man_sufix    = $params['man'];
                         $crop->target_sufix = $params['target'];
@@ -354,6 +356,7 @@ abstract class CropCommandHandler
 
                 if(!$crop)
                 {
+                    $crop = new Cropitem();
                     $crop->name = $crop_name;
                     $crop->block_name = $block_name;
                     $crop->image_name = $image_name;
@@ -416,6 +419,7 @@ abstract class CropCommandHandler
 
                 if(!$crop)
                 {
+                    $crop = new Cropitem();
                     $crop->block_name = $block_name;
                     $crop->group_name = $group_name;
                     $crop->group_id   = $group_id;
