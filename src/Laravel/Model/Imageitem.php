@@ -46,8 +46,14 @@ class Imageitem extends Model
                     //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix($imageitem->prefix);
                     //\Interpro\ImageFileLogic\ImageFileLogic::removeForPrefix('mod_'.$imageitem->prefix);
 
-                    $imageItem = new InterproImageItem($imageitem->prefix, ['a'=>1]);
-                    $imageItem_mod = new InterproImageItem('mod_'.$imageitem->prefix, []);
+                    //2 строки костыля, в базе хранение с id, в item'ax переделано без id,
+                    //здесь единственное место где команда создается из itema
+                    $suffix_pos = strripos($imageitem->prefix, '_');
+                    $config_name = substr($imageitem->prefix, 0, $suffix_pos);
+                    //--------------------------------------------------------
+
+                    $imageItem = new InterproImageItem($config_name, $imageitem->group_id, ['a'=>1]);
+                    $imageItem_mod = new InterproImageItem('mod_'.$imageitem->prefix, $imageitem->group_id, []);
 
                     $delAction = new DeleteImageAction();
 
