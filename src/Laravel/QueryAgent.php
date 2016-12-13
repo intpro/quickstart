@@ -158,7 +158,7 @@ class QueryAgent implements QueryAgentInterface{
         $this->groupSpecificationSet->reset($name);
         $this->setEqSpecs($specs);
 
-        $this->repository->getGroupCount($block_name, $name);
+        return $this->repository->getGroupCount($block_name, $name);
     }
 
     /**
