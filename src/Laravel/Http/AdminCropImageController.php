@@ -27,7 +27,7 @@ class AdminCropImageController extends Controller
                     return ['status' => 'OK'];
 
                 } catch(\Exception $exception) {
-                    return ['status' => ('Что-то пошло не так. '.$exception->getMessage())];
+                    return ['status' => ($exception->getMessage())];
                 }
             } else {
                 return ['status' => 'Имя сохраняемой сущности не равно group ('.$dataobj['entity'].').'];

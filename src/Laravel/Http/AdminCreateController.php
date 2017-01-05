@@ -48,7 +48,7 @@ class AdminCreateController extends Controller
 
         } catch(\Exception $exception) {
 
-            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status'=>($exception->getMessage())];
         }
     }
 
@@ -106,7 +106,7 @@ class AdminCreateController extends Controller
 
         }catch (\Exception $exception){
 
-            return ['success'=>false, 'message'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['success'=>false, 'message'=>($exception->getMessage())];
         }
     }
 
@@ -134,7 +134,7 @@ class AdminCreateController extends Controller
 
         } catch(\Exception $exception) {
 
-            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status'=>($exception->getMessage())];
         }
 
         return ['status'=>'OK'];
@@ -152,7 +152,7 @@ class AdminCreateController extends Controller
 
         } catch(\Exception $exception) {
 
-            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status'=>($exception->getMessage())];
         }
 
         return ['status'=>'OK'];
@@ -170,7 +170,7 @@ class AdminCreateController extends Controller
 
         } catch(\Exception $exception) {
 
-            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status'=>($exception->getMessage())];
         }
 
         return ['status'=>'OK'];
@@ -188,7 +188,7 @@ class AdminCreateController extends Controller
 
         } catch(\Exception $exception) {
 
-            return ['status'=>('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status'=>($exception->getMessage())];
         }
 
         return ['status'=>'OK'];

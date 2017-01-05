@@ -15,7 +15,7 @@ class AdminDeleteController extends Controller
             return ['status' => 'OK', 'deleted' => $deleted];
 
         } catch(\Exception $exception) {
-            return ['status' => ('Что-то пошло не так. '.$exception->getMessage())];
+            return ['status' => ($exception->getMessage())];
         }
     }
 }
