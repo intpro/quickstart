@@ -71,7 +71,7 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['stringfields'] as $fieldname)
                 {
                     $stringfield = Stringfield::create(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
-                    $stringfield->value = 'поле строковое - '.$fieldname;
+                    $stringfield->value = '';
                     $newGroupItem->stringfields()->save($stringfield);
                     $dataArr[$fieldname] = $stringfield->value;
                 }
@@ -82,7 +82,7 @@ class CreateGroupItemCommandHandler {
                 foreach($groupstruct['textfields'] as $fieldname)
                 {
                     $textfield = Textfield::firstOrNew(['block_name'=>$block_name, 'group_name'=>$group_name, 'name'=>$fieldname, 'group_id'=>$newGroupItem->id]);
-                    $textfield->value = 'поле текст - '.$fieldname;
+                    $textfield->value = '';
                     $newGroupItem->textfields()->save($textfield);
                     $dataArr[$fieldname] = $textfield->value;
                 }
