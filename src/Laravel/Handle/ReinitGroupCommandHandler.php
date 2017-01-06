@@ -76,12 +76,6 @@ class ReinitGroupCommandHandler {
 
                                 $image_name = $group_name.'_'.$fieldname;
 
-                                $preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
-                                $primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
-                                $original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
-                                $secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
-                                $icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
-
                                 $image = Imageitem::where('block_name', $block_name)->where('group_name', $group_name)->where('group_id', $group_id)->where('name', $fieldname)->first();
 
                                 if(!$image)
@@ -91,15 +85,15 @@ class ReinitGroupCommandHandler {
                                     $image->block_name = $block_name;
                                     $image->group_name = $group_name;
                                     $image->group_id = $group_id;
+
+                                    $image->preview_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'preview');
+                                    $image->primary_link   = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                                    $image->original_link  = $this->imageLogicAgent->getPlaceholder($image_name, 'primary');
+                                    $image->secondary_link = $this->imageLogicAgent->getPlaceholder($image_name, 'secondary');
+                                    $image->icon_link      = $this->imageLogicAgent->getPlaceholder($image_name, 'icon');
+
+                                    $image->save();
                                 }
-
-                                $image->preview_link   = $preview_link;
-                                $image->primary_link   = $primary_link;
-                                $image->original_link  = $original_link;
-                                $image->secondary_link = $secondary_link;
-                                $image->icon_link      = $icon_link;
-
-                                $image->save();
 
                             }
                         }
